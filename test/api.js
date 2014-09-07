@@ -1,6 +1,9 @@
 var Lab = require('lab');
 var Hapi = require('hapi');
-var Store = require('../../lib/store/file');
+var Pail = require('pail').pail;
+
+var jobPath = '/tmp/tacklebox/job';
+var runPath = '/tmp/reel';
 
 var internals = {};
 
@@ -16,7 +19,7 @@ internals.prepareServer = function (callback) {
 
     server.pack.register({
 
-        plugin: require('../..')
+        plugin: require('..')
     }, function (err) {
 
         expect(err).to.not.exist;
@@ -25,21 +28,7 @@ internals.prepareServer = function (callback) {
 };
 
 describe('api', function () {    
-/*
 
-    it('GET /api/job/{job_id}/run/{run_id}/cancel', function (done) {
-        var job_id = Store.getJobConfigByName('git');
-        var run_id = 1;
-        internals.prepareServer(function (server) {
-            server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id + '/cancel' }, function (response) {
-
-                expect(response.statusCode).to.equal(200);
-                expect(response.payload).to.exist;
-                done();
-            });
-        });
-    });
-*/
   it('POST /api/job parallelcommand', function (done) {
         internals.prepareServer(function (server) {
 
@@ -51,28 +40,28 @@ describe('api', function () {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist;
-                expect(response.result.job_id).to.exist;
+                expect(response.result.id).to.exist;
                 done();
             });
         });
    });
 
    it('GET /api/job/{job_id}/run parallelcommand', function (done) {
-        var job_id = Store.getJobConfigByName('parallelcommand');
+        var job_id = Pail.getPailByName(jobPath, 'parallelcommand');
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
-                var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
+                //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.job_id).to.exist;
-                expect(lastSuccess_id).to.not.exist;
+                //expect(lastSuccess_id).to.not.exist;
                 done();
             });
         });
     });
 
     it('DELETE /api/job/{job_id} parallelcommand', function (done) {
-        var job_id = Store.getJobConfigByName('parallelcommand');
+        var job_id = Pail.getPailByName(jobPath, 'parallelcommand');
         internals.prepareServer(function (server) {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
@@ -99,8 +88,9 @@ describe('api', function () {
             });
         });
    });
+
 */
-/*
+
    it('POST /api/job sleep5', function (done) {
         internals.prepareServer(function (server) {
 
@@ -112,7 +102,7 @@ describe('api', function () {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist;
-                expect(response.result.job_id).to.exist;
+                expect(response.result.id).to.exist;
                 done();
             });
         });
@@ -122,21 +112,21 @@ describe('api', function () {
 // maybe background a process that runs every 1s and tries to kill the specific command by the same user?
 // generate bash script with sleep with specific name
     it('GET /api/job/{job_id}/run sleep5', function (done) {
-        var job_id = Store.getJobConfigByName('sleep5');
+        var job_id = Pail.getPailByName(jobPath, 'sleep5');
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
-                var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
+                //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.run_id).to.exist;
-                expect(lastSuccess_id).to.exist;
+                //expect(lastSuccess_id).to.exist;
                 done();
             });
         });
     });
 
     it('DELETE /api/job/{job_id} sleep5', function (done) {
-        var job_id = Store.getJobConfigByName('sleep5');
+        var job_id = Pail.getPailByName(jobPath, 'sleep5');
         internals.prepareServer(function (server) {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
@@ -146,7 +136,6 @@ describe('api', function () {
             });
         });
     });
-*/
 
     it('POST /api/job badcmd', function (done) {
         internals.prepareServer(function (server) {
@@ -159,14 +148,14 @@ describe('api', function () {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist;
-                expect(response.result.job_id).to.exist;
+                expect(response.result.id).to.exist;
                 done();
             });
         });
     });
 
     it('PUT /api/job/{job_id} badcommand', function (done) {
-        var job_id = Store.getJobConfigByName('badcmd');
+        var job_id = Pail.getPailByName(jobPath, 'badcmd');
         var payload = { name: "badcommand", command: "uptim" };
         internals.prepareServer(function (server) {
             server.inject({ method: 'PUT', url: '/api/job/'+ job_id, payload: payload }, function (response) {
@@ -181,30 +170,32 @@ describe('api', function () {
     });
 
     it('GET /api/job/{job_id}/run badcommand', function (done) {
-        var job_id = Store.getJobConfigByName('badcommand');
+        var job_id = Pail.getPailByName(jobPath, 'badcommand');
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
-                var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
-                var lastFail_id = Store.getRunByLabel(job_id, 'lastFail');
+                //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
+                //var lastFail_id = Store.getRunByLabel(job_id, 'lastFail');
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.run_id).to.exist;
-                expect(lastFail_id).to.exist;
-                expect(lastSuccess_id).to.not.exist;
+                //expect(lastFail_id).to.exist;
+                //expect(lastSuccess_id).to.not.exist;
                 done();
             });
         });
     });
 
     it('GET /api/job/{job_id}/run/{run_id} badcommand', function (done) {
-        var job_id = Store.getJobConfigByName('badcommand');
-        var run_id = Store.getRunByLabel(job_id, 'lastFail');
+        var job_id = Pail.getPailByName(jobPath, 'badcommand');
+        var pail = Pail.getPail(jobPath, job_id);
+        var run = Pail.getPail(runPath, pail.reel_id);
+        var run_id = run.id;
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.result.status).is.equal('failed');
-                expect(response.result.finishTime).is.greaterThan(run_id);
+                //expect(response.result.status).is.equal('failed');
+                expect(response.result.finishTime).is.greaterThan(response.result.startTime);
                 expect(response.payload).to.exist;
                 done();
             });
@@ -212,7 +203,7 @@ describe('api', function () {
     });
 
     it('DELETE /api/job/{job_id} badcommand', function (done) {
-        var job_id = Store.getJobConfigByName('badcommand');
+        var job_id = Pail.getPailByName(jobPath, 'badcommand');
         internals.prepareServer(function (server) {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
@@ -239,30 +230,30 @@ describe('api', function () {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist;
-                expect(response.result.job_id).to.exist;
+                expect(response.result.id).to.exist;
                 done();
             });
         });
     });
 
     it('GET /api/job/{job_id}/run invalidscm', function (done) {
-        var job_id = Store.getJobConfigByName('invalidscm');
+        var job_id = Pail.getPailByName(jobPath, 'invalidscm');
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
-                var lastFail_id = Store.getRunByLabel(job_id, 'lastFail');
-                var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
+                //var lastFail_id = Store.getRunByLabel(job_id, 'lastFail');
+                //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
                 expect(response.statusCode).to.equal(200);
-                expect(response.result.run_id).to.exist;
-                expect(lastSuccess_id).to.not.exist;
-                expect(lastFail_id).to.exist;
+                expect(response.result.job_id).to.exist;
+                //expect(lastSuccess_id).to.not.exist;
+                //expect(lastFail_id).to.exist;
                 done();
             });
         });
     });
 
     it('DELETE /api/job/{job_id} invalidscm', function (done) {
-        var job_id = Store.getJobConfigByName('invalidscm');
+        var job_id = Pail.getPailByName(jobPath, 'invalidscm');
         internals.prepareServer(function (server) {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
@@ -286,7 +277,7 @@ describe('api', function () {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist;
-                expect(response.result.job_id).to.exist;
+                expect(response.result.id).to.exist;
                 done();
             });
         });
@@ -311,7 +302,7 @@ describe('api', function () {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist;
-                expect(response.result.job_id).to.exist;
+                expect(response.result.id).to.exist;
                 done();
             });
         });
@@ -329,7 +320,7 @@ describe('api', function () {
     });
 
     it('GET /api/job/{job_id} git', function (done) {
-        var job_id = Store.getJobConfigByName('git');
+        var job_id = Pail.getPailByName(jobPath, 'git');
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id }, function (response) {
 
@@ -341,7 +332,7 @@ describe('api', function () {
     });
 
     it('GET /api/job/{job_id}/run git', function (done) {
-        var job_id = Store.getJobConfigByName('git');
+        var job_id = Pail.getPailByName(jobPath, 'git');
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
@@ -353,7 +344,7 @@ describe('api', function () {
     });
 
     it('GET /api/job/{job_id}/run noscm', function (done) {
-        var job_id = Store.getJobConfigByName('noscm');
+        var job_id = Pail.getPailByName(jobPath, 'noscm');
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
@@ -365,16 +356,16 @@ describe('api', function () {
     });
 
     it('GET /api/job/{job_id}/run noscm labels', function (done) {
-        var job_id = Store.getJobConfigByName('noscm');
+        var job_id = Pail.getPailByName(jobPath, 'noscm');
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
-                var last_id = Store.getRunByLabel(job_id, 'last');
-                var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
+                //var last_id = Store.getRunByLabel(job_id, 'last');
+                //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.run_id).to.exist;
-                expect(response.result.run_id.toString()).to.equal(last_id);
-                expect(response.result.run_id.toString()).to.equal(lastSuccess_id);
+                //expect(response.result.run_id.toString()).to.equal(last_id);
+                //expect(response.result.run_id.toString()).to.equal(lastSuccess_id);
                 done();
             });
         });
@@ -382,7 +373,7 @@ describe('api', function () {
 
     it('GET /api/job/{job_id}/runs', function (done) {
 
-        var job_id = Store.getJobConfigByName('noscm');
+        var job_id = Pail.getPailByName(jobPath, 'noscm');
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/' + job_id + '/runs'}, function (response) {
 
@@ -394,24 +385,26 @@ describe('api', function () {
     });
 
     it('GET /api/job/{job_id}/run/{run_id} git', function (done) {
-        var job_id = Store.getJobConfigByName('git');
-        var run_id = Store.getRunByLabel(job_id, 'last');
+        var job_id = Pail.getPailByName(jobPath, 'git');
+        var pail = Pail.getPail(jobPath, job_id);
+        var run_id = pail.reel_id;
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.status).is.equal('succeeded');
-                expect(response.result.finishTime).is.greaterThan(run_id);
-                expect(response.result.elapsedTime).is.greaterThan(0);
+                expect(response.result.finishTime).is.greaterThan(response.result.startTime);
+                expect(response.result.elapsedTime).to.exist;
                 expect(response.payload).to.exist;
                 done();
             });
         });
     });
-
+/*
     it('GET /api/job/{job_id}/run/{run_id}/console git', function (done) {
-        var job_id = Store.getJobConfigByName('git');
-        var run_id = Store.getRunByLabel(job_id, 'last');
+        var job_id = Pail.getPailByName(jobPath, 'git');
+        var pail = Pail.getPail(jobPath, job_id);
+        var run_id = pail.reel_id;
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id + '/console' }, function (response) {
 
@@ -421,10 +414,11 @@ describe('api', function () {
             });
         });
     });
-
+*/
     it('DELETE /api/job/{job_id}/run/{run_id} git', function (done) {
-        var job_id = Store.getJobConfigByName('git');
-        var run_id = Store.getRunByLabel(job_id, 'last');
+        var job_id = Pail.getPailByName(jobPath, 'git');
+        var pail = Pail.getPail(jobPath, job_id);
+        var run_id = pail.reel_id;
         internals.prepareServer(function (server) {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id + '/run/' + run_id }, function (response) {
 
@@ -436,7 +430,7 @@ describe('api', function () {
     });
 
     it('DELETE /api/job/{job_id} git', function (done) {
-        var job_id = Store.getJobConfigByName('git');
+        var job_id = Pail.getPailByName(jobPath, 'git');
         internals.prepareServer(function (server) {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
@@ -448,7 +442,7 @@ describe('api', function () {
     });
 
     it('DELETE /api/job/{job_id} noscm', function (done) {
-        var job_id = Store.getJobConfigByName('noscm');
+        var job_id = Pail.getPailByName(jobPath, 'noscm');
         internals.prepareServer(function (server) {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
