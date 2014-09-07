@@ -17,7 +17,9 @@
     "hapi": "6.x.x",
     "hoek": "2.x.x",
     "joi": "4.x.x",
-    "node-uuid": "1.4.x"
+    "node-uuid": "1.4.x",
+    "reel": "git+ssh://git@github.com:fishin/reel.git",
+    "wreck": "5.x.x"
   },
   "devDependencies": {
     "lab": "4.x.x"
