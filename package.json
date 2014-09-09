@@ -18,9 +18,9 @@
     "hoek": "2.x.x",
     "joi": "4.x.x",
     "node-uuid": "1.4.x",
-    "bobber": "http://git@github.com:fishin/bobber.git",
-    "reel": "http://git@github.com:fishin/reel.git",
-    "pail": "http://git@github.com:fishin/pail.git"
+    "bobber": "http://github.com/fishin/bobber.git",
+    "reel": "http://github.com/fishin/reel.git",
+    "pail": "http://github.com/fishin/pail.git"
   },
   "devDependencies": {
     "lab": "4.x.x"
