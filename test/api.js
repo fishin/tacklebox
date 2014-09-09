@@ -33,8 +33,8 @@ describe('api', function () {
         internals.prepareServer(function (server) {
 
             var payload = {
-                name: "parallelcommand",
-                body: [ "sleep 5", "sleep 2" ]
+                name: 'parallelcommand',
+                body: [ 'sleep 5', 'sleep 2' ]
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -76,7 +76,7 @@ describe('api', function () {
         internals.prepareServer(function (server) {
 
             var payload = {
-                name: "missingcommand"
+                name: 'missingcommand'
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -95,8 +95,8 @@ describe('api', function () {
         internals.prepareServer(function (server) {
 
             var payload = {
-                name: "sleep5",
-                body: "sleep 5"
+                name: 'sleep5',
+                body: 'sleep 5'
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -141,8 +141,8 @@ describe('api', function () {
         internals.prepareServer(function (server) {
 
             var payload = {
-                name: "badcmd",
-                body: "uptime"
+                name: 'badcmd',
+                body: 'uptime'
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -156,7 +156,7 @@ describe('api', function () {
 
     it('PUT /api/job/{job_id} badcommand', function (done) {
         var job_id = Pail.getPailByName(jobPath, 'badcmd');
-        var payload = { name: "badcommand", command: "uptim" };
+        var payload = { name: 'badcommand', command: 'uptim' };
         internals.prepareServer(function (server) {
             server.inject({ method: 'PUT', url: '/api/job/'+ job_id, payload: payload }, function (response) {
 
@@ -217,13 +217,13 @@ describe('api', function () {
         internals.prepareServer(function (server) {
 
             var payload = {
-                name: "invalidscm",
+                name: 'invalidscm',
                 scm: {
                     type: 'invalid'
                 },
-                head: "date",
-                body: "uptime",
-                tail: "cat /etc/hosts"
+                head: 'date',
+                body: 'uptime',
+                tail: 'cat /etc/hosts'
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -267,10 +267,10 @@ describe('api', function () {
         internals.prepareServer(function (server) {
 
             var payload = {
-                name: "noscm",
-                head: "date",
-                body: "uptime",
-                tail: "cat /etc/hosts"
+                name: 'noscm',
+                head: 'date',
+                body: 'uptime',
+                tail: 'cat /etc/hosts'
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -286,16 +286,15 @@ describe('api', function () {
         internals.prepareServer(function (server) {
 
             var payload = {
-                name: "git",
+                name: 'git',
                 scm: {
-                    type: 'github',
-                    url: 'git@github.com:lloydbenson/node-ci',
-                    prs: true,
+                    type: 'git',
+                    url: 'git@github.com:fishin/tacklebox',
                     branch: 'origin/master'
                 },
-                head: "date",
-                body: "uptime",
-                tail: "cat /etc/hosts"
+                head: 'date',
+                body: 'uptime',
+                tail: 'cat /etc/hosts'
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
