@@ -5,7 +5,6 @@ restful api for ficion
 
 [![Build Status](https://secure.travis-ci.org/fishin/tacklebox.svg)](http://travis-ci.org/fishin/tacklebox)
 
-
 notes:
 
 placeholder for minimal list of ci features
