@@ -34,7 +34,7 @@ describe('api', function () {
 
             var payload = {
                 name: "parallelcommand",
-                command: [ "sleep 5", "sleep 2" ]
+                body: [ "sleep 5", "sleep 2" ]
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -96,7 +96,7 @@ describe('api', function () {
 
             var payload = {
                 name: "sleep5",
-                command: "sleep 5"
+                body: "sleep 5"
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -142,7 +142,7 @@ describe('api', function () {
 
             var payload = {
                 name: "badcmd",
-                command: "uptime"
+                body: "uptime"
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -222,9 +222,9 @@ describe('api', function () {
                 scm: {
                     type: 'invalid'
                 },
-                pre: "date",
-                command: "uptime",
-                post: "cat /etc/hosts"
+                head: "date",
+                body: "uptime",
+                tail: "cat /etc/hosts"
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -269,9 +269,9 @@ describe('api', function () {
 
             var payload = {
                 name: "noscm",
-                pre: "date",
-                command: "uptime",
-                post: "cat /etc/hosts"
+                head: "date",
+                body: "uptime",
+                tail: "cat /etc/hosts"
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -294,9 +294,9 @@ describe('api', function () {
                     prs: true,
                     branch: 'origin/master'
                 },
-                pre: "date",
-                command: "uptime",
-                post: "cat /etc/hosts"
+                head: "date",
+                body: "uptime",
+                tail: "cat /etc/hosts"
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
