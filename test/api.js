@@ -1,11 +1,24 @@
 var Lab = require('lab');
 var Hapi = require('hapi');
-var Pail = require('pail').pail;
+var Pail = require('pail');
 
-var jobPath = '/tmp/tacklebox/job';
-var runPath = '/tmp/reel';
+var internals = {
+    defaults: {
+        job: {
+            pailPath: '/tmp/tacklebox/job',
+            workspace: 'workspace',
+            configFile: 'config.json'
+        }
+//        run: {
+//            runPath: '/tmp/reel',
+//            workspace: 'workspace',
+//            configFile: 'config.json'
+//        }
+    }
+};
 
-var internals = {};
+var jobPail = new Pail(internals.defaults.job);
+//var runPail = new Pail(internals.defaults.run);
 
 var lab = exports.lab = Lab.script();
 var expect = Lab.expect;
@@ -47,7 +60,7 @@ describe('api', function () {
    });
 
    it('GET /api/job/{job_id}/run parallelcommand', function (done) {
-        var job_id = Pail.getPailByName(jobPath, 'parallelcommand');
+        var job_id = jobPail.getPailByName('parallelcommand');
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
@@ -61,7 +74,7 @@ describe('api', function () {
     });
 
     it('DELETE /api/job/{job_id} parallelcommand', function (done) {
-        var job_id = Pail.getPailByName(jobPath, 'parallelcommand');
+        var job_id = jobPail.getPailByName('parallelcommand');
         internals.prepareServer(function (server) {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
@@ -112,7 +125,7 @@ describe('api', function () {
 // maybe background a process that runs every 1s and tries to kill the specific command by the same user?
 // generate bash script with sleep with specific name
     it('GET /api/job/{job_id}/run sleep5', function (done) {
-        var job_id = Pail.getPailByName(jobPath, 'sleep5');
+        var job_id = jobPail.getPailByName('sleep5');
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
@@ -126,7 +139,7 @@ describe('api', function () {
     });
 
     it('DELETE /api/job/{job_id} sleep5', function (done) {
-        var job_id = Pail.getPailByName(jobPath, 'sleep5');
+        var job_id = jobPail.getPailByName('sleep5');
         internals.prepareServer(function (server) {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
@@ -155,7 +168,7 @@ describe('api', function () {
     });
 
     it('PUT /api/job/{job_id} badcommand', function (done) {
-        var job_id = Pail.getPailByName(jobPath, 'badcmd');
+        var job_id = jobPail.getPailByName('badcmd');
         var payload = { name: 'badcommand', command: 'uptim' };
         internals.prepareServer(function (server) {
             server.inject({ method: 'PUT', url: '/api/job/'+ job_id, payload: payload }, function (response) {
@@ -170,7 +183,7 @@ describe('api', function () {
     });
 
     it('GET /api/job/{job_id}/run badcommand', function (done) {
-        var job_id = Pail.getPailByName(jobPath, 'badcommand');
+        var job_id = jobPail.getPailByName('badcommand');
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
@@ -186,8 +199,8 @@ describe('api', function () {
     });
 
     it('GET /api/job/{job_id}/run/{run_id} badcommand', function (done) {
-        var job_id = Pail.getPailByName(jobPath, 'badcommand');
-        var job = Pail.getPail(jobPath, job_id);
+        var job_id = jobPail.getPailByName('badcommand');
+        var job = jobPail.getPail(job_id);
         var run_id = job.runs[0];
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (response) {
@@ -202,7 +215,7 @@ describe('api', function () {
     });
 
     it('DELETE /api/job/{job_id} badcommand', function (done) {
-        var job_id = Pail.getPailByName(jobPath, 'badcommand');
+        var job_id = jobPail.getPailByName('badcommand');
         internals.prepareServer(function (server) {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
@@ -236,7 +249,7 @@ describe('api', function () {
     });
 
     it('GET /api/job/{job_id}/run invalidscm', function (done) {
-        var job_id = Pail.getPailByName(jobPath, 'invalidscm');
+        var job_id = jobPail.getPailByName('invalidscm');
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
@@ -252,7 +265,7 @@ describe('api', function () {
     });
 
     it('DELETE /api/job/{job_id} invalidscm', function (done) {
-        var job_id = Pail.getPailByName(jobPath, 'invalidscm');
+        var job_id = jobPail.getPailByName('invalidscm');
         internals.prepareServer(function (server) {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
@@ -318,7 +331,7 @@ describe('api', function () {
     });
 
     it('GET /api/job/{job_id} git', function (done) {
-        var job_id = Pail.getPailByName(jobPath, 'git');
+        var job_id = jobPail.getPailByName('git');
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id }, function (response) {
 
@@ -330,7 +343,7 @@ describe('api', function () {
     });
 
     it('GET /api/job/{job_id}/run git', function (done) {
-        var job_id = Pail.getPailByName(jobPath, 'git');
+        var job_id = jobPail.getPailByName('git');
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
@@ -342,7 +355,7 @@ describe('api', function () {
     });
 
     it('GET /api/job/{job_id}/run noscm', function (done) {
-        var job_id = Pail.getPailByName(jobPath, 'noscm');
+        var job_id = jobPail.getPailByName('noscm');
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
@@ -354,7 +367,7 @@ describe('api', function () {
     });
 
     it('GET /api/job/{job_id}/run noscm labels', function (done) {
-        var job_id = Pail.getPailByName(jobPath, 'noscm');
+        var job_id = jobPail.getPailByName('noscm');
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
@@ -371,7 +384,7 @@ describe('api', function () {
 
     it('GET /api/job/{job_id}/runs', function (done) {
 
-        var job_id = Pail.getPailByName(jobPath, 'noscm');
+        var job_id = jobPail.getPailByName('noscm');
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/' + job_id + '/runs'}, function (response) {
 
@@ -383,8 +396,8 @@ describe('api', function () {
     });
 
     it('GET /api/job/{job_id}/run/{run_id} git', function (done) {
-        var job_id = Pail.getPailByName(jobPath, 'git');
-        var job = Pail.getPail(jobPath, job_id);
+        var job_id = jobPail.getPailByName('git');
+        var job = jobPail.getPail(job_id);
         var run_id = job.runs[0];
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (response) {
@@ -400,8 +413,8 @@ describe('api', function () {
     });
 /*
     it('GET /api/job/{job_id}/run/{run_id}/console git', function (done) {
-        var job_id = Pail.getPailByName(jobPath, 'git');
-        var pail = Pail.getPail(jobPath, job_id);
+        var job_id = jobPail.getPailByName('git');
+        var pail = jobPail.getPail(job_id);
         var run_id = pail.reel_id;
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id + '/console' }, function (response) {
@@ -414,8 +427,8 @@ describe('api', function () {
     });
 */
     it('DELETE /api/job/{job_id}/run/{run_id} git', function (done) {
-        var job_id = Pail.getPailByName(jobPath, 'git');
-        var job = Pail.getPail(jobPath, job_id);
+        var job_id = jobPail.getPailByName('git');
+        var job = jobPail.getPail(job_id);
         var run_id = job.runs[0];
         internals.prepareServer(function (server) {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id + '/run/' + run_id }, function (response) {
@@ -428,7 +441,7 @@ describe('api', function () {
     });
 
     it('DELETE /api/job/{job_id} git', function (done) {
-        var job_id = Pail.getPailByName(jobPath, 'git');
+        var job_id = jobPail.getPailByName('git');
         internals.prepareServer(function (server) {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
@@ -440,7 +453,7 @@ describe('api', function () {
     });
 
     it('DELETE /api/job/{job_id} noscm', function (done) {
-        var job_id = Pail.getPailByName(jobPath, 'noscm');
+        var job_id = jobPail.getPailByName('noscm');
         internals.prepareServer(function (server) {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
