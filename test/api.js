@@ -8,17 +8,17 @@ var internals = {
             pailPath: '/tmp/tacklebox/job',
             workspace: 'workspace',
             configFile: 'config.json'
+        },
+        run: {
+            pailPath: '/tmp/reel',
+            workspace: 'workspace',
+            configFile: 'config.json'
         }
-//        run: {
-//            runPath: '/tmp/reel',
-//            workspace: 'workspace',
-//            configFile: 'config.json'
-//        }
     }
 };
 
 var jobPail = new Pail(internals.defaults.job);
-//var runPail = new Pail(internals.defaults.run);
+var runPail = new Pail(internals.defaults.run);
 
 var lab = exports.lab = Lab.script();
 var expect = Lab.expect;
@@ -302,12 +302,12 @@ describe('api', function () {
                 name: 'git',
                 scm: {
                     type: 'git',
-                    url: 'git@github.com:fishin/tacklebox',
-                    branch: 'origin/master'
+                    url: 'https://github.com/fishin/tacklebox',
+                    branch: 'master'
                 },
-                head: 'date',
-                body: 'uptime',
-                tail: 'cat /etc/hosts'
+                head: 'pwd',
+                body: 'ls',
+                tail: 'bin/tail.sh'
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -347,8 +347,11 @@ describe('api', function () {
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
+                var run_id = response.result.run_id;
+                var run = runPail.getPail(run_id);
+                //console.log(JSON.stringify(run, null, 4));
                 expect(response.statusCode).to.equal(200);
-                expect(response.result.run_id).to.exist;
+                expect(run_id).to.exist;
                 done();
             });
         });
