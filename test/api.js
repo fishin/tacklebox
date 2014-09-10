@@ -305,8 +305,8 @@ describe('api', function () {
                     url: 'https://github.com/fishin/tacklebox',
                     branch: 'master'
                 },
-                head: 'pwd',
-                body: 'ls',
+                head: 'bin/head.sh',
+                body: 'bin/body.sh',
                 tail: 'bin/tail.sh'
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
