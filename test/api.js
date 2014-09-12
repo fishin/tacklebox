@@ -9,8 +9,8 @@ var internals = {
             workspace: 'workspace',
             configFile: 'config.json'
         },
-        reel: {
-            pailPath: '/tmp/tacklebox/runs',
+        run: {
+            pailPath: '/tmp/tacklebox/run',
             workspace: 'workspace',
             configFile: 'config.json'
         }
@@ -18,7 +18,7 @@ var internals = {
 };
 
 var jobPail = new Pail(internals.defaults.job);
-var runPail = new Pail(internals.defaults.reel);
+var runPail = new Pail(internals.defaults.run);
 
 var lab = exports.lab = Lab.script();
 var expect = Lab.expect;
