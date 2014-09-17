@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "restful api for ficion",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fishin/tacklebox"
+  },
   "scripts": {
     "test": "make test-cov"
   },
