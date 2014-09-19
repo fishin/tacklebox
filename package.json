@@ -20,6 +20,7 @@
     "hapi": "6.x.x",
     "hoek": "2.x.x",
     "joi": "4.x.x",
+    "node-uuid": "1.x.x",
     "bobber": "git+https://github.com/fishin/bobber.git",
     "reel": "git+https://github.com/fishin/reel.git",
     "pail": "git+https://github.com/fishin/pail.git"

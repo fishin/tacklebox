@@ -5,12 +5,17 @@ var Pail = require('pail');
 var internals = {
     defaults: {
         job: {
-            pailPath: '/tmp/tacklebox/job',
+            pailPath: '/tmp/testtacklebox/job',
             workspace: 'workspace',
             configFile: 'config.json'
         },
         run: {
-            pailPath: '/tmp/tacklebox/run',
+            pailPath: '/tmp/testtacklebox/run',
+            workspace: 'workspace',
+            configFile: 'config.json'
+        },
+        queue: {
+            pailPath: '/tmp/testtacklebox/queue',
             workspace: 'workspace',
             configFile: 'config.json'
         }
@@ -19,6 +24,7 @@ var internals = {
 
 var jobPail = new Pail(internals.defaults.job);
 var runPail = new Pail(internals.defaults.run);
+var queuePail = new Pail(internals.defaults.queue);
 
 var lab = exports.lab = Lab.script();
 var expect = Lab.expect;
@@ -32,7 +38,8 @@ internals.prepareServer = function (callback) {
 
     server.pack.register({
 
-        plugin: require('..')
+        plugin: require('..'),
+        options: internals.defaults
     }, function (err) {
 
         expect(err).to.not.exist;
@@ -463,6 +470,96 @@ describe('api', function () {
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist;
                 done();
+            });
+        });
+    });
+
+    it('POST /api/queue', function (done) {
+
+        var payload = {
+            name: 'global',
+            size: 4
+        };
+        internals.prepareServer(function (server) {
+            server.inject({ method: 'POST', url: '/api/queue', payload: payload }, function (response) {
+
+                //console.log(response.result);
+                expect(response.statusCode).to.equal(200);
+                expect(response.result.id).to.exist;
+                done();
+            });
+        });
+    });
+
+    it('GET /api/queues', function (done) {
+
+        internals.prepareServer(function (server) {
+            server.inject({ method: 'GET', url: '/api/queues'}, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                expect(response.result).to.have.length(1);
+                done();
+            });
+        });
+    });
+
+    it('GET /api/queue/{id}', function (done) {
+
+        internals.prepareServer(function (server) {
+            server.inject({ method: 'GET', url: '/api/queues'}, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                expect(response.result).to.have.length(1);
+                var id = response.result[0];
+                server.inject({ method: 'GET', url: '/api/queue/' + id}, function (response) {
+
+                    //console.log(response.result);
+                    expect(response.result.id).to.exist;
+                    expect(response.result.size).to.equal(4);
+                    expect(response.statusCode).to.equal(200);
+                    done();
+                });
+            });
+        });
+    });
+
+    it('POST /api/queue/{id}', function (done) {
+
+        internals.prepareServer(function (server) {
+            server.inject({ method: 'GET', url: '/api/queues'}, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                expect(response.result).to.have.length(1);
+                var id = response.result[0];
+                var payload = { size: 5 };
+                server.inject({ method: 'POST', url: '/api/queue/' + id, payload: payload}, function (response) {
+
+                    //console.log(response.result);
+                    expect(response.statusCode).to.equal(200);
+                    expect(response.result.size).to.equal(5);
+                    done();
+                });
+            });
+        });
+    });
+
+    it('DELETE /api/queue/{id}', function (done) {
+
+        internals.prepareServer(function (server) {
+            server.inject({ method: 'GET', url: '/api/queues'}, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                expect(response.result).to.have.length(1);
+                var id = response.result[0];
+                server.inject({ method: 'DELETE', url: '/api/queue/' + id}, function (response) {
+
+                    expect(response.statusCode).to.equal(200);
+                    server.inject({ method: 'GET', url: '/api/queues'}, function (response) {
+
+                        expect(response.result).to.have.length(0);
+                        done();
+                    });
+                });
             });
         });
     });
