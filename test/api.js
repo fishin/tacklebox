@@ -14,8 +14,8 @@ var internals = {
             workspace: 'workspace',
             configFile: 'config.json'
         },
-        queue: {
-            pailPath: '/tmp/testtacklebox/queue',
+        reel: {
+            pailPath: '/tmp/testtacklebox/reel',
             workspace: 'workspace',
             configFile: 'config.json'
         }
@@ -24,7 +24,7 @@ var internals = {
 
 var jobPail = new Pail(internals.defaults.job);
 var runPail = new Pail(internals.defaults.run);
-var queuePail = new Pail(internals.defaults.queue);
+var reelPail = new Pail(internals.defaults.reel);
 
 var lab = exports.lab = Lab.script();
 var expect = Lab.expect;
@@ -474,14 +474,14 @@ describe('api', function () {
         });
     });
 
-    it('POST /api/queue', function (done) {
+    it('POST /api/reel', function (done) {
 
         var payload = {
             name: 'global',
             size: 4
         };
         internals.prepareServer(function (server) {
-            server.inject({ method: 'POST', url: '/api/queue', payload: payload }, function (response) {
+            server.inject({ method: 'POST', url: '/api/reel', payload: payload }, function (response) {
 
                 //console.log(response.result);
                 expect(response.statusCode).to.equal(200);
@@ -491,10 +491,10 @@ describe('api', function () {
         });
     });
 
-    it('GET /api/queues', function (done) {
+    it('GET /api/reels', function (done) {
 
         internals.prepareServer(function (server) {
-            server.inject({ method: 'GET', url: '/api/queues'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/reels'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result).to.have.length(1);
@@ -503,15 +503,15 @@ describe('api', function () {
         });
     });
 
-    it('GET /api/queue/{id}', function (done) {
+    it('GET /api/reel/{id}', function (done) {
 
         internals.prepareServer(function (server) {
-            server.inject({ method: 'GET', url: '/api/queues'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/reels'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result).to.have.length(1);
                 var id = response.result[0];
-                server.inject({ method: 'GET', url: '/api/queue/' + id}, function (response) {
+                server.inject({ method: 'GET', url: '/api/reel/' + id}, function (response) {
 
                     //console.log(response.result);
                     expect(response.result.id).to.exist;
@@ -523,16 +523,16 @@ describe('api', function () {
         });
     });
 
-    it('POST /api/queue/{id}', function (done) {
+    it('POST /api/reel/{id}', function (done) {
 
         internals.prepareServer(function (server) {
-            server.inject({ method: 'GET', url: '/api/queues'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/reels'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result).to.have.length(1);
                 var id = response.result[0];
                 var payload = { size: 5 };
-                server.inject({ method: 'POST', url: '/api/queue/' + id, payload: payload}, function (response) {
+                server.inject({ method: 'POST', url: '/api/reel/' + id, payload: payload}, function (response) {
 
                     //console.log(response.result);
                     expect(response.statusCode).to.equal(200);
@@ -543,18 +543,18 @@ describe('api', function () {
         });
     });
 
-    it('DELETE /api/queue/{id}', function (done) {
+    it('DELETE /api/reel/{id}', function (done) {
 
         internals.prepareServer(function (server) {
-            server.inject({ method: 'GET', url: '/api/queues'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/reels'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result).to.have.length(1);
                 var id = response.result[0];
-                server.inject({ method: 'DELETE', url: '/api/queue/' + id}, function (response) {
+                server.inject({ method: 'DELETE', url: '/api/reel/' + id}, function (response) {
 
                     expect(response.statusCode).to.equal(200);
-                    server.inject({ method: 'GET', url: '/api/queues'}, function (response) {
+                    server.inject({ method: 'GET', url: '/api/reels'}, function (response) {
 
                         expect(response.result).to.have.length(0);
                         done();
