@@ -398,8 +398,9 @@ describe('api', function () {
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/job/' + job_id + '/runs'}, function (response) {
 
+                //console.log(response.result);
                 expect(response.statusCode).to.equal(200);
-                expect(response.result).to.have.length(2);
+                expect(response.result).to.have.length(3);
                 done();
             });
         });
