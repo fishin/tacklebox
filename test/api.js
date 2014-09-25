@@ -72,11 +72,22 @@ describe('api', function () {
             var job_id = jobPail.getPailByName('parallelcommand');
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
-                //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
                 expect(response.statusCode).to.equal(200);
-                expect(response.result.job_id).to.exist;
-                //expect(lastSuccess_id).to.not.exist;
-                done();
+                var run_id = response.result.id;
+                var intervalObj = setInterval(function() {
+
+                    server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (newResponse) {
+
+                        if (newResponse.result.finishTime) {
+                            clearInterval(intervalObj);
+                            //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
+                            expect(newResponse.result.id).to.exist;
+                            expect(newResponse.result.finishTime).to.exist;
+                            //expect(lastSuccess_id).to.not.exist;
+                            done();
+                        }
+                    });
+                }, 1000);
             });
         });
     });
@@ -143,11 +154,21 @@ describe('api', function () {
             var job_id = jobPail.getPailByName('sleep5');
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
-                //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
                 expect(response.statusCode).to.equal(200);
-                expect(response.result.run_id).to.exist;
-                //expect(lastSuccess_id).to.exist;
-                done();
+                var run_id = response.result.id;
+                var intervalObj = setInterval(function() {
+
+                    server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (newResponse) {
+
+                        if (newResponse.result.finishTime) {
+                            clearInterval(intervalObj);
+                            //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
+                            expect(newResponse.result.id).to.exist;
+                            expect(newResponse.result.finishTime).to.exist;
+                            done();
+                        }
+                    });
+                }, 1000);
             });
         });
     });
@@ -208,13 +229,24 @@ describe('api', function () {
             var job_id = jobPail.getPailByName('badcommand');
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
-                //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
-                //var lastFail_id = Store.getRunByLabel(job_id, 'lastFail');
                 expect(response.statusCode).to.equal(200);
-                expect(response.result.run_id).to.exist;
-                //expect(lastFail_id).to.exist;
-                //expect(lastSuccess_id).to.not.exist;
-                done();
+                var run_id = response.result.id;
+                var intervalObj = setInterval(function() {
+
+                    server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (newResponse) {
+
+                        if (newResponse.result.finishTime) {
+                            clearInterval(intervalObj);
+                            //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
+                            //var lastFail_id = Store.getRunByLabel(job_id, 'lastFail');
+                            expect(newResponse.result.id).to.exist;
+                            expect(newResponse.result.finishTime).to.exist;
+                            //expect(lastFail_id).to.exist;
+                            //expect(lastSuccess_id).to.not.exist;
+                            done();
+                        }
+                    });
+                }, 1000);
             });
         });
     });
@@ -281,13 +313,24 @@ describe('api', function () {
             var job_id = jobPail.getPailByName('invalidscm');
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
-                //var lastFail_id = Store.getRunByLabel(job_id, 'lastFail');
-                //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
                 expect(response.statusCode).to.equal(200);
-                expect(response.result.job_id).to.exist;
-                //expect(lastSuccess_id).to.not.exist;
-                //expect(lastFail_id).to.exist;
-                done();
+                var run_id = response.result.id;
+                var intervalObj = setInterval(function() {
+
+                    server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (newResponse) {
+
+                        if (newResponse.result.finishTime) {
+                            clearInterval(intervalObj);
+                            //var lastFail_id = Store.getRunByLabel(job_id, 'lastFail');
+                            //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
+                            expect(newResponse.result.id).to.exist;
+                            expect(newResponse.result.finishTime).to.exist;
+                            //expect(lastSuccess_id).to.not.exist;
+                            //expect(lastFail_id).to.exist;
+                            done();
+                        }
+                    });
+                }, 1000);
             });
         });
     });
@@ -384,12 +427,21 @@ describe('api', function () {
             var job_id = jobPail.getPailByName('git');
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
-                var run_id = response.result.run_id;
-                var run = server.plugins.tacklebox.getRun(run_id);
-                //console.log(JSON.stringify(run, null, 4));
                 expect(response.statusCode).to.equal(200);
-                expect(run_id).to.exist;
-                done();
+                var run_id = response.result.id;
+                var intervalObj = setInterval(function() {
+
+                    server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (newResponse) {
+
+                        if (newResponse.result.finishTime) {
+                            clearInterval(intervalObj);
+                            //console.log(JSON.stringify(run, null, 4));
+                            expect(newResponse.result.id).to.exist;
+                            expect(newResponse.result.finishTime).to.exist;
+                            done();
+                        }
+                    });
+                }, 1000);
             });
         });
     });
@@ -402,8 +454,20 @@ describe('api', function () {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.result.run_id).to.exist;
-                done();
+                var run_id = response.result.id;
+                var intervalObj = setInterval(function() {
+
+                    server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (newResponse) {
+
+                        if (newResponse.result.finishTime) {
+                            clearInterval(intervalObj);
+                            //console.log(JSON.stringify(run, null, 4));
+                            expect(newResponse.result.id).to.exist;
+                            expect(newResponse.result.finishTime).to.exist;
+                            done();
+                        }
+                    });
+                }, 1000);
             });
         });
     });
@@ -415,13 +479,25 @@ describe('api', function () {
             var job_id = jobPail.getPailByName('noscm');
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run'}, function (response) {
 
-                //var last_id = Store.getRunByLabel(job_id, 'last');
-                //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
                 expect(response.statusCode).to.equal(200);
-                expect(response.result.run_id).to.exist;
-                //expect(response.result.run_id.toString()).to.equal(last_id);
-                //expect(response.result.run_id.toString()).to.equal(lastSuccess_id);
-                done();
+                var run_id = response.result.id;
+                var intervalObj = setInterval(function() {
+
+                    server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (newResponse) {
+
+                        if (newResponse.result.finishTime) {
+                            clearInterval(intervalObj);
+                            //console.log(JSON.stringify(run, null, 4));
+                            //var last_id = Store.getRunByLabel(job_id, 'last');
+                            //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
+                            expect(newResponse.result.id).to.exist;
+                            expect(newResponse.result.finishTime).to.exist;
+                            //expect(response.result.run_id.toString()).to.equal(last_id);
+                            //expect(response.result.run_id.toString()).to.equal(lastSuccess_id);
+                            done();
+                        }
+                    });
+                }, 1000);
             });
         });
     });
