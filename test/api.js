@@ -271,8 +271,7 @@ describe('api', function () {
         internals.prepareServer(function (server) {
 
             var job_id = jobPail.getPailByName('badcommand');
-            var job = jobPail.getPail(job_id);
-            var run_id = job.runs[0];
+            var run_id = server.plugins.tacklebox.getRuns(job_id)[0];
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -537,8 +536,7 @@ describe('api', function () {
         internals.prepareServer(function (server) {
 
             var job_id = jobPail.getPailByName('git');
-            var job = jobPail.getPail(job_id);
-            var run_id = job.runs[0];
+            var run_id = server.plugins.tacklebox.getRuns(job_id)[0];
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -572,8 +570,7 @@ describe('api', function () {
         internals.prepareServer(function (server) {
 
             var job_id = jobPail.getPailByName('git');
-            var job = jobPail.getPail(job_id);
-            var run_id = job.runs[0];
+            var run_id = server.plugins.tacklebox.getRuns(job_id)[0];
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id + '/run/' + run_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
