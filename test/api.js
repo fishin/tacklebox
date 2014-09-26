@@ -629,6 +629,21 @@ describe('api', function () {
         });
     });
 
+   it('GET /api/reel/byname global', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            server.inject({ method: 'GET', url: '/api/reel/byname/global'}, function (response) {
+
+                //console.log(response);
+                expect(response.statusCode).to.equal(200);
+                expect(response.result.id).to.exist;
+                expect(response.result.name).to.equal('global');
+                done();
+            });
+        });
+    });
+
     it('GET /api/reels', function (done) {
 
         internals.prepareServer(function (server) {
