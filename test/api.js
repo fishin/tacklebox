@@ -10,7 +10,7 @@ var internals = {
             configFile: 'config.json'
         },
         run: {
-            dirpath: '/tmp/testtacklebox/run',
+//            dirpath: '/tmp/testtacklebox/run',
             workspace: 'workspace',
             configFile: 'config.json'
         },
@@ -511,7 +511,7 @@ describe('api', function () {
 
                 //console.log(response.result);
                 expect(response.statusCode).to.equal(200);
-                expect(response.result).to.have.length(3);
+                expect(response.result).to.have.length(2);
                 done();
             });
         });
