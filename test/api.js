@@ -92,6 +92,21 @@ describe('api', function () {
         });
     });
 
+   it('GET /api/job/byname parallelcommand', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            server.inject({ method: 'GET', url: '/api/job/byname/parallelcommand'}, function (response) {
+
+                //console.log(response);
+                expect(response.statusCode).to.equal(200);
+                expect(response.result.id).to.exist;
+                expect(response.result.name).to.equal('parallelcommand');
+                done();
+            });
+        });
+    });
+
     it('DELETE /api/job/{job_id} parallelcommand', function (done) {
 
         internals.prepareServer(function (server) {
