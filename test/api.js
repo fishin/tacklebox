@@ -65,7 +65,7 @@ describe('api', function () {
         });
    });
 
-   it('GET /api/job/{job_id}/run parallelcommand', function (done) {
+   it('GET /api/job/{job_id}/start parallelcommand', function (done) {
 
         internals.prepareServer(function (server) {
 
@@ -166,7 +166,7 @@ describe('api', function () {
 // want to try to abort this
 // maybe background a process that runs every 1s and tries to kill the specific command by the same user?
 // generate bash script with sleep with specific name
-    it('GET /api/job/{job_id}/run sleep5', function (done) {
+    it('GET /api/job/{job_id}/start sleep5', function (done) {
 
         internals.prepareServer(function (server) {
 
@@ -241,7 +241,7 @@ describe('api', function () {
         });
     });
 
-    it('GET /api/job/{job_id}/run badcommand', function (done) {
+    it('GET /api/job/{job_id}/start badcommand', function (done) {
 
         internals.prepareServer(function (server) {
 
@@ -324,7 +324,7 @@ describe('api', function () {
         });
     });
 
-    it('GET /api/job/{job_id}/run invalidscm', function (done) {
+    it('GET /api/job/{job_id}/start invalidscm', function (done) {
 
         internals.prepareServer(function (server) {
 
@@ -438,7 +438,7 @@ describe('api', function () {
         });
     });
 
-    it('GET /api/job/{job_id}/run git', function (done) {
+    it('GET /api/job/{job_id}/start git', function (done) {
 
         internals.prepareServer(function (server) {
 
@@ -464,7 +464,7 @@ describe('api', function () {
         });
     });
 
-    it('GET /api/job/{job_id}/run noscm', function (done) {
+    it('GET /api/job/{job_id}/start noscm', function (done) {
 
         internals.prepareServer(function (server) {
 
@@ -490,7 +490,7 @@ describe('api', function () {
         });
     });
 
-    it('GET /api/job/{job_id}/run noscm labels', function (done) {
+    it('GET /api/job/{job_id}/start noscm labels', function (done) {
 
         internals.prepareServer(function (server) {
 
@@ -603,6 +603,70 @@ describe('api', function () {
         internals.prepareServer(function (server) {
 
             var job_id = jobPail.getPailByName('noscm');
+            server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                expect(response.payload).to.exist;
+                done();
+            });
+        });
+    });
+
+  it('POST /api/job parallelcommand cancel', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var payload = {
+                name: 'cancel',
+                body: [ 'sleep 5', 'sleep 2' ]
+            };
+            server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                expect(response.payload).to.exist;
+                expect(response.result.id).to.exist;
+                done();
+            });
+        });
+   });
+
+   it('GET /api/job/{job_id}/start cancel', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var job_id = jobPail.getPailByName('cancel');
+            server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/start'}, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                var run_id = response.result.id;
+                server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id + '/cancel' }, function (cancelResponse) {
+
+                    expect(cancelResponse).to.exist;
+                });
+                var intervalObj = setInterval(function() {
+
+                    server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (newResponse) {
+
+                        if (newResponse.result.finishTime) {
+                            clearInterval(intervalObj);
+                            //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
+                            expect(newResponse.result.id).to.exist;
+                            expect(newResponse.result.finishTime).to.exist;
+                            expect(newResponse.result.status).to.equal('cancelled');
+                            //expect(lastSuccess_id).to.not.exist;
+                            done();
+                        }
+                    });
+                }, 1000);
+            });
+        });
+    });
+
+    it('DELETE /api/job/{job_id} cancel', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var job_id = jobPail.getPailByName('cancel');
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
