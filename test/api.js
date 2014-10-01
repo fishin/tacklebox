@@ -69,7 +69,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('parallelcommand');
+            var job_id = jobPail.getPailByLink('parallelcommand');
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -96,11 +96,11 @@ describe('api', function () {
         });
     });
 
-   it('GET /api/job/byname parallelcommand', function (done) {
+   it('GET /api/job/bylink parallelcommand', function (done) {
 
         internals.prepareServer(function (server) {
 
-            server.inject({ method: 'GET', url: '/api/job/byname/parallelcommand'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/job/bylink/parallelcommand'}, function (response) {
 
                 //console.log(response);
                 expect(response.statusCode).to.equal(200);
@@ -115,7 +115,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('parallelcommand');
+            var job_id = jobPail.getPailByLink('parallelcommand');
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -170,7 +170,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('sleep5');
+            var job_id = jobPail.getPailByLink('sleep5');
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -196,7 +196,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('sleep5');
+            var job_id = jobPail.getPailByLink('sleep5');
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -228,7 +228,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('badcmd');
+            var job_id = jobPail.getPailByLink('badcmd');
             var payload = { name: 'badcommand', command: 'uptim' };
             server.inject({ method: 'PUT', url: '/api/job/'+ job_id, payload: payload }, function (response) {
 
@@ -245,7 +245,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('badcommand');
+            var job_id = jobPail.getPailByLink('badcommand');
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -274,7 +274,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('badcommand');
+            var job_id = jobPail.getPailByLink('badcommand');
             var run_id = server.plugins.tacklebox.getRuns(job_id)[0].id;
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (response) {
 
@@ -291,7 +291,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('badcommand');
+            var job_id = jobPail.getPailByLink('badcommand');
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -328,7 +328,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('invalidscm');
+            var job_id = jobPail.getPailByLink('invalidscm');
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -357,7 +357,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('invalidscm');
+            var job_id = jobPail.getPailByLink('invalidscm');
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -428,7 +428,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('git');
+            var job_id = jobPail.getPailByLink('git');
             server.inject({ method: 'GET', url: '/api/job/'+ job_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -442,7 +442,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('git');
+            var job_id = jobPail.getPailByLink('git');
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -468,7 +468,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('noscm');
+            var job_id = jobPail.getPailByLink('noscm');
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -494,7 +494,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('noscm');
+            var job_id = jobPail.getPailByLink('noscm');
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -524,7 +524,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('noscm');
+            var job_id = jobPail.getPailByLink('noscm');
             server.inject({ method: 'GET', url: '/api/job/' + job_id + '/runs'}, function (response) {
 
                 //console.log(response.result);
@@ -539,7 +539,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('git');
+            var job_id = jobPail.getPailByLink('git');
             var run_id = server.plugins.tacklebox.getRuns(job_id)[0].id;
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (response) {
 
@@ -557,7 +557,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('git');
+            var job_id = jobPail.getPailByLink('git');
             var pail = jobPail.getPail(job_id);
             var run_id = pail.reel_id;
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id + '/console' }, function (response) {
@@ -573,7 +573,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('git');
+            var job_id = jobPail.getPailByLink('git');
             var run_id = server.plugins.tacklebox.getRuns(job_id)[0].id;
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id + '/run/' + run_id }, function (response) {
 
@@ -588,7 +588,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('git');
+            var job_id = jobPail.getPailByLink('git');
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -602,7 +602,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('noscm');
+            var job_id = jobPail.getPailByLink('noscm');
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -634,7 +634,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('cancel');
+            var job_id = jobPail.getPailByLink('cancel');
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -666,7 +666,7 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByName('cancel');
+            var job_id = jobPail.getPailByLink('cancel');
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -694,11 +694,11 @@ describe('api', function () {
         });
     });
 
-   it('GET /api/reel/byname global', function (done) {
+   it('GET /api/reel/bylink global', function (done) {
 
         internals.prepareServer(function (server) {
 
-            server.inject({ method: 'GET', url: '/api/reel/byname/global'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/reel/bylink/global'}, function (response) {
 
                 //console.log(response);
                 expect(response.statusCode).to.equal(200);
