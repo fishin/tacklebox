@@ -552,6 +552,25 @@ describe('api', function () {
             });
         });
     });
+
+    it('GET /api/job/{job_id}/run/bylink last', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var job_id = jobPail.getPailByLink('git');
+            var run_id = server.plugins.tacklebox.getRuns(job_id)[0].id;
+            var lastRun = server.plugins.tacklebox.getRunByLink(job_id, 'last');
+            server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/bylink/last'}, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                expect(response.result.status).is.equal('succeeded');
+                expect(response.result.id).to.exist;
+                expect(response.result.id).to.equal(run_id);
+                expect(response.payload).to.exist;
+                done();
+            });
+        });
+    });
 /*
     it('GET /api/job/{job_id}/run/{run_id}/console git', function (done) {
 
