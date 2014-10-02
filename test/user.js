@@ -50,7 +50,7 @@ internals.prepareServer = function (callback) {
 
 describe('user', function () {    
 
-    it('POST /api/user', function (done) {
+    it('POST /api/user lloyd', function (done) {
 
         internals.prepareServer(function (server) {
 
@@ -69,13 +69,32 @@ describe('user', function () {
         });
     });
 
+    it('POST /api/user backer', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var payload = {
+                username: 'backer',
+                name: 'Ben Acker',
+                email: 'ben.acker@gmail.com'
+            };
+            server.inject({ method: 'POST', url: '/api/user', payload: payload }, function (response) {
+
+                //console.log(response.result);
+                expect(response.statusCode).to.equal(200);
+                expect(response.result.id).to.exist;
+                done();
+            });
+        });
+    });
+
     it('GET /api/users', function (done) {
 
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/users'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.result).to.have.length(1);
+                expect(response.result).to.have.length(2);
                 done();
             });
         });
@@ -88,8 +107,8 @@ describe('user', function () {
             server.inject({ method: 'GET', url: '/api/users'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.result).to.have.length(1);
-                var id = response.result[0];
+                expect(response.result).to.have.length(2);
+                var id = response.result[0].id;
                 server.inject({ method: 'GET', url: '/api/user/' + id}, function (response) {
 
                     //console.log(response.result);
@@ -109,8 +128,8 @@ describe('user', function () {
             server.inject({ method: 'GET', url: '/api/users'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.result).to.have.length(1);
-                var id = response.result[0];
+                expect(response.result).to.have.length(2);
+                var id = response.result[0].id;
                 var payload = { name: 'Lloyd Benson' };
                 server.inject({ method: 'POST', url: '/api/user/' + id, payload: payload}, function (response) {
 
@@ -123,7 +142,29 @@ describe('user', function () {
         });
     });
 
-    it('DELETE /api/user/{id}', function (done) {
+    it('DELETE /api/user/{id} lloyd', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            server.inject({ method: 'GET', url: '/api/users'}, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                expect(response.result).to.have.length(2);
+                var id = response.result[0].id;
+                server.inject({ method: 'DELETE', url: '/api/user/' + id}, function (response) {
+
+                    expect(response.statusCode).to.equal(200);
+                    server.inject({ method: 'GET', url: '/api/users'}, function (response) {
+
+                        expect(response.result).to.have.length(1);
+                        done();
+                    });
+                });
+            });
+        });
+    });
+
+    it('DELETE /api/user/{id} backer', function (done) {
 
         internals.prepareServer(function (server) {
 
@@ -131,7 +172,7 @@ describe('user', function () {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result).to.have.length(1);
-                var id = response.result[0];
+                var id = response.result[0].id;
                 server.inject({ method: 'DELETE', url: '/api/user/' + id}, function (response) {
 
                     expect(response.statusCode).to.equal(200);
