@@ -79,9 +79,9 @@ describe('api', function () {
 
                 expect(response.statusCode).to.equal(200);
                 var run_id = response.result.id;
-                server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id + '/pid' }, function (pidResponse) {
+                server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id + '/pids' }, function (pidsResponse) {
 
-                    expect(pidResponse).to.exist;
+                    expect(pidsResponse).to.exist;
                 });
                 var intervalObj = setInterval(function() {
 
