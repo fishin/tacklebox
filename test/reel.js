@@ -1,3 +1,4 @@
+var Code = require('code');
 var Lab = require('lab');
 var Hapi = require('hapi');
 var Pail = require('pail');
@@ -30,9 +31,7 @@ var internals = {
 var jobPail = new Pail(internals.defaults.job);
 
 var lab = exports.lab = Lab.script();
-var expect = Lab.expect;
-var before = lab.before;
-var after = lab.after;
+var expect = Code.expect;
 var describe = lab.describe;
 var it = lab.it;
 
@@ -45,7 +44,7 @@ internals.prepareServer = function (callback) {
         options: internals.defaults
     }, function (err) {
 
-        expect(err).to.not.exist;
+        expect(err).to.not.exist();
         callback(server);
     });
 };
@@ -64,7 +63,7 @@ describe('reel', function () {
 
                 //console.log(response.result);
                 expect(response.statusCode).to.equal(200);
-                expect(response.result.id).to.exist;
+                expect(response.result.id).to.exist();
                 done();
             });
         });
@@ -82,7 +81,7 @@ describe('reel', function () {
 
                 //console.log(response.result);
                 expect(response.statusCode).to.equal(200);
-                expect(response.result.id).to.exist;
+                expect(response.result.id).to.exist();
                 done();
             });
         });
@@ -97,7 +96,7 @@ describe('reel', function () {
 
                 //console.log(response);
                 expect(response.statusCode).to.equal(200);
-                expect(response.result.id).to.exist;
+                expect(response.result.id).to.exist();
                 expect(response.result.name).to.equal('reel1');
                 done();
             });
@@ -128,7 +127,7 @@ describe('reel', function () {
                 server.inject({ method: 'GET', url: '/api/reel/' + id}, function (response) {
 
                     //console.log(response.result);
-                    expect(response.result.id).to.exist;
+                    expect(response.result.id).to.exist();
                     expect(response.result.size).to.equal(4);
                     expect(response.statusCode).to.equal(200);
                     done();

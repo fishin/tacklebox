@@ -1,3 +1,4 @@
+var Code = require('code');
 var Lab = require('lab');
 var Hapi = require('hapi');
 var Pail = require('pail');
@@ -30,9 +31,7 @@ var internals = {
 var jobPail = new Pail(internals.defaults.job);
 
 var lab = exports.lab = Lab.script();
-var expect = Lab.expect;
-var before = lab.before;
-var after = lab.after;
+var expect = Code.expect;
 var describe = lab.describe;
 var it = lab.it;
 
@@ -45,7 +44,7 @@ internals.prepareServer = function (callback) {
         options: internals.defaults
     }, function (err) {
 
-        expect(err).to.not.exist;
+        expect(err).to.not.exist();
         callback(server);
     });
 };
@@ -63,8 +62,8 @@ describe('api', function () {
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.payload).to.exist;
-                expect(response.result.id).to.exist;
+                expect(response.payload).to.exist();
+                expect(response.result.id).to.exist();
                 done();
             });
         });
@@ -81,7 +80,7 @@ describe('api', function () {
                 var run_id = response.result.id;
                 server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id + '/pids' }, function (pidsResponse) {
 
-                    expect(pidsResponse).to.exist;
+                    expect(pidsResponse).to.exist();
                 });
                 var intervalObj = setInterval(function() {
 
@@ -90,9 +89,9 @@ describe('api', function () {
                         if (newResponse.result.finishTime) {
                             clearInterval(intervalObj);
                             //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
-                            expect(newResponse.result.id).to.exist;
-                            expect(newResponse.result.finishTime).to.exist;
-                            //expect(lastSuccess_id).to.not.exist;
+                            expect(newResponse.result.id).to.exist();
+                            expect(newResponse.result.finishTime).to.exist();
+                            //expect(lastSuccess_id).to.not.exist();
                             done();
                         }
                     });
@@ -109,7 +108,7 @@ describe('api', function () {
 
                 //console.log(response);
                 expect(response.statusCode).to.equal(200);
-                expect(response.result.id).to.exist;
+                expect(response.result.id).to.exist();
                 expect(response.result.name).to.equal('parallelcommand');
                 done();
             });
@@ -124,7 +123,7 @@ describe('api', function () {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.payload).to.exist;
+                expect(response.payload).to.exist();
                 done();
             });
         });
@@ -140,9 +139,9 @@ describe('api', function () {
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.payload).to.exist;
-                expect(response.result.job_id).to.not.exist;
-                expect(response.result.err).to.exist;
+                expect(response.payload).to.exist();
+                expect(response.result.job_id).to.not.exist();
+                expect(response.result.err).to.exist();
                 done();
             });
         });
@@ -161,8 +160,8 @@ describe('api', function () {
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.payload).to.exist;
-                expect(response.result.id).to.exist;
+                expect(response.payload).to.exist();
+                expect(response.result.id).to.exist();
                 done();
             });
         });
@@ -187,8 +186,8 @@ describe('api', function () {
                         if (newResponse.result.finishTime) {
                             clearInterval(intervalObj);
                             //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
-                            expect(newResponse.result.id).to.exist;
-                            expect(newResponse.result.finishTime).to.exist;
+                            expect(newResponse.result.id).to.exist();
+                            expect(newResponse.result.finishTime).to.exist();
                             done();
                         }
                     });
@@ -205,7 +204,7 @@ describe('api', function () {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.payload).to.exist;
+                expect(response.payload).to.exist();
                 done();
             });
         });
@@ -222,8 +221,8 @@ describe('api', function () {
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.payload).to.exist;
-                expect(response.result.id).to.exist;
+                expect(response.payload).to.exist();
+                expect(response.result.id).to.exist();
                 done();
             });
         });
@@ -238,7 +237,7 @@ describe('api', function () {
             server.inject({ method: 'PUT', url: '/api/job/'+ job_id, payload: payload }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.result.updateTime).to.exist;
+                expect(response.result.updateTime).to.exist();
                 expect(response.result.name).to.equal('badcommand');
                 expect(response.result.command).to.equal('uptim');
                 done();
@@ -263,10 +262,10 @@ describe('api', function () {
                             clearInterval(intervalObj);
                             //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
                             //var lastFail_id = Store.getRunByLabel(job_id, 'lastFail');
-                            expect(newResponse.result.id).to.exist;
-                            expect(newResponse.result.finishTime).to.exist;
-                            //expect(lastFail_id).to.exist;
-                            //expect(lastSuccess_id).to.not.exist;
+                            expect(newResponse.result.id).to.exist();
+                            expect(newResponse.result.finishTime).to.exist();
+                            //expect(lastFail_id).to.exist();
+                            //expect(lastSuccess_id).to.not.exist();
                             done();
                         }
                     });
@@ -285,8 +284,8 @@ describe('api', function () {
 
                 expect(response.statusCode).to.equal(200);
                 //expect(response.result.status).is.equal('failed');
-                expect(response.result.finishTime).is.greaterThan(response.result.startTime);
-                expect(response.payload).to.exist;
+                expect(response.result.finishTime).to.be.above(response.result.startTime);
+                expect(response.payload).to.exist();
                 done();
             });
         });
@@ -300,7 +299,7 @@ describe('api', function () {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.payload).to.exist;
+                expect(response.payload).to.exist();
                 done();
             });
         });
@@ -322,8 +321,8 @@ describe('api', function () {
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.payload).to.exist;
-                expect(response.result.id).to.exist;
+                expect(response.payload).to.exist();
+                expect(response.result.id).to.exist();
                 done();
             });
         });
@@ -346,10 +345,10 @@ describe('api', function () {
                             clearInterval(intervalObj);
                             //var lastFail_id = Store.getRunByLabel(job_id, 'lastFail');
                             //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
-                            expect(newResponse.result.id).to.exist;
-                            expect(newResponse.result.finishTime).to.exist;
-                            //expect(lastSuccess_id).to.not.exist;
-                            //expect(lastFail_id).to.exist;
+                            expect(newResponse.result.id).to.exist();
+                            expect(newResponse.result.finishTime).to.exist();
+                            //expect(lastSuccess_id).to.not.exist();
+                            //expect(lastFail_id).to.exist();
                             done();
                         }
                     });
@@ -366,7 +365,7 @@ describe('api', function () {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.payload).to.exist;
+                expect(response.payload).to.exist();
                 done();
             });
         });
@@ -385,8 +384,8 @@ describe('api', function () {
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.payload).to.exist;
-                expect(response.result.id).to.exist;
+                expect(response.payload).to.exist();
+                expect(response.result.id).to.exist();
                 done();
             });
         });
@@ -410,8 +409,8 @@ describe('api', function () {
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.payload).to.exist;
-                expect(response.result.id).to.exist;
+                expect(response.payload).to.exist();
+                expect(response.result.id).to.exist();
                 done();
             });
         });
@@ -437,7 +436,7 @@ describe('api', function () {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.payload).to.exist;
+                expect(response.payload).to.exist();
                 done();
             });
         });
@@ -459,8 +458,8 @@ describe('api', function () {
                         if (newResponse.result.finishTime) {
                             clearInterval(intervalObj);
                             //console.log(JSON.stringify(run, null, 4));
-                            expect(newResponse.result.id).to.exist;
-                            expect(newResponse.result.finishTime).to.exist;
+                            expect(newResponse.result.id).to.exist();
+                            expect(newResponse.result.finishTime).to.exist();
                             done();
                         }
                     });
@@ -485,8 +484,8 @@ describe('api', function () {
                         if (newResponse.result.finishTime) {
                             clearInterval(intervalObj);
                             //console.log(JSON.stringify(run, null, 4));
-                            expect(newResponse.result.id).to.exist;
-                            expect(newResponse.result.finishTime).to.exist;
+                            expect(newResponse.result.id).to.exist();
+                            expect(newResponse.result.finishTime).to.exist();
                             done();
                         }
                     });
@@ -513,8 +512,8 @@ describe('api', function () {
                             //console.log(JSON.stringify(run, null, 4));
                             //var last_id = Store.getRunByLabel(job_id, 'last');
                             //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
-                            expect(newResponse.result.id).to.exist;
-                            expect(newResponse.result.finishTime).to.exist;
+                            expect(newResponse.result.id).to.exist();
+                            expect(newResponse.result.finishTime).to.exist();
                             //expect(response.result.run_id.toString()).to.equal(last_id);
                             //expect(response.result.run_id.toString()).to.equal(lastSuccess_id);
                             done();
@@ -549,10 +548,10 @@ describe('api', function () {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.result.status).is.equal('succeeded');
-                expect(response.result.finishTime).is.greaterThan(response.result.startTime);
-                expect(response.result.elapsedTime).to.exist;
-                expect(response.payload).to.exist;
+                expect(response.result.status).to.equal('succeeded');
+                expect(response.result.finishTime).to.be.above(response.result.startTime);
+                expect(response.result.elapsedTime).to.exist();
+                expect(response.payload).to.exist();
                 done();
             });
         });
@@ -568,10 +567,10 @@ describe('api', function () {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/bylink/last'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.result.status).is.equal('succeeded');
-                expect(response.result.id).to.exist;
+                expect(response.result.status).to.equal('succeeded');
+                expect(response.result.id).to.exist();
                 expect(response.result.id).to.equal(run_id);
-                expect(response.payload).to.exist;
+                expect(response.payload).to.exist();
                 done();
             });
         });
@@ -587,7 +586,7 @@ describe('api', function () {
             server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id + '/console' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.result.console).to.exist;
+                expect(response.result.console).to.exist();
                 done();
             });
         });
@@ -602,7 +601,7 @@ describe('api', function () {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id + '/run/' + run_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.payload).to.exist;
+                expect(response.payload).to.exist();
                 done();
             });
         });
@@ -616,7 +615,7 @@ describe('api', function () {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.payload).to.exist;
+                expect(response.payload).to.exist();
                 done();
             });
         });
@@ -630,7 +629,7 @@ describe('api', function () {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.payload).to.exist;
+                expect(response.payload).to.exist();
                 done();
             });
         });
@@ -647,8 +646,8 @@ describe('api', function () {
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.payload).to.exist;
-                expect(response.result.id).to.exist;
+                expect(response.payload).to.exist();
+                expect(response.result.id).to.exist();
                 done();
             });
         });
@@ -665,7 +664,7 @@ describe('api', function () {
                 var run_id = response.result.id;
                 server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id + '/cancel' }, function (cancelResponse) {
 
-                    expect(cancelResponse).to.exist;
+                    expect(cancelResponse).to.exist();
                 });
                 var intervalObj = setInterval(function() {
 
@@ -674,10 +673,10 @@ describe('api', function () {
                         if (newResponse.result.finishTime) {
                             clearInterval(intervalObj);
                             //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
-                            expect(newResponse.result.id).to.exist;
-                            expect(newResponse.result.finishTime).to.exist;
+                            expect(newResponse.result.id).to.exist();
+                            expect(newResponse.result.finishTime).to.exist();
                             expect(newResponse.result.status).to.equal('cancelled');
-                            //expect(lastSuccess_id).to.not.exist;
+                            //expect(lastSuccess_id).to.not.exist();
                             done();
                         }
                     });
@@ -694,7 +693,7 @@ describe('api', function () {
             server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.payload).to.exist;
+                expect(response.payload).to.exist();
                 done();
             });
         });

@@ -1,3 +1,4 @@
+var Code = require('code');
 var Hapi = require('hapi');
 var Lab = require('lab');
 var Notify = require('../lib/notify');
@@ -5,9 +6,7 @@ var Notify = require('../lib/notify');
 var internals = {};
 
 var lab = exports.lab = Lab.script();
-var expect = Lab.expect;
-var before = lab.before;
-var after = lab.after;
+var expect = Code.expect;
 var describe = lab.describe;
 var it = lab.it;
 

@@ -1,6 +1,6 @@
 {
   "name": "tacklebox",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "restful api for ficion",
   "main": "index.js",
   "repository": {
@@ -23,6 +23,7 @@
     "pail": "git+https://github.com/fishin/pail.git"
   },
   "devDependencies": {
-    "lab": "4.x.x"
+    "code": "1.x.x",
+    "lab": "5.x.x"
   }
 }

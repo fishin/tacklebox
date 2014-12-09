@@ -1,3 +1,4 @@
+var Code = require('code');
 var Lab = require('lab');
 var Hapi = require('hapi');
 var Pail = require('pail');
@@ -28,9 +29,7 @@ var internals = {
 };
 
 var lab = exports.lab = Lab.script();
-var expect = Lab.expect;
-var before = lab.before;
-var after = lab.after;
+var expect = Code.expect;
 var describe = lab.describe;
 var it = lab.it;
 
@@ -43,7 +42,7 @@ internals.prepareServer = function (callback) {
         options: internals.defaults
     }, function (err) {
 
-        expect(err).to.not.exist;
+        expect(err).to.not.exist();
         callback(server);
     });
 };
@@ -63,7 +62,7 @@ describe('user', function () {
 
                 //console.log(response.result);
                 expect(response.statusCode).to.equal(200);
-                expect(response.result.id).to.exist;
+                expect(response.result.id).to.exist();
                 done();
             });
         });
@@ -82,7 +81,7 @@ describe('user', function () {
 
                 //console.log(response.result);
                 expect(response.statusCode).to.equal(200);
-                expect(response.result.id).to.exist;
+                expect(response.result.id).to.exist();
                 done();
             });
         });
@@ -112,7 +111,7 @@ describe('user', function () {
                 server.inject({ method: 'GET', url: '/api/user/' + id}, function (response) {
 
                     //console.log(response.result);
-                    expect(response.result.id).to.exist;
+                    expect(response.result.id).to.exist();
                     expect(response.result.name).to.equal('Lloyd Benson1');
                     expect(response.statusCode).to.equal(200);
                     done();
