@@ -1,6 +1,6 @@
 {
   "name": "tacklebox",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "restful api for ficion",
   "main": "index.js",
   "repository": {
@@ -14,9 +14,9 @@
   "license": "MIT",
   "dependencies": {
     "boom": "2.x.x",
-    "hapi": "6.x.x",
+    "hapi": "8.x.x",
     "hoek": "2.x.x",
-    "joi": "4.x.x",
+    "joi": "5.x.x",
     "node-uuid": "1.x.x",
     "bobber": "git+https://github.com/fishin/bobber.git",
     "reel": "git+https://github.com/fishin/reel.git",
