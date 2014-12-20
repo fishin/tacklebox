@@ -16,8 +16,8 @@ describe('notify', function () {
 
         var notify = {
             type: 'email',
-            job_id: 1,
-            run_id: 1,
+            jobId: 1,
+            runId: 1,
             subject: 'test',
             recipients: [ 'lloydbenson@gmail.com', 'backer@gmail.com' ],
             body: 'this is a body of text',

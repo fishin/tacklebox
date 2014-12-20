@@ -70,29 +70,29 @@ describe('api', function () {
         });
    });
 
-   it('GET /api/job/{job_id}/start parallelcommand', function (done) {
+   it('GET /api/job/{jobId}/start parallelcommand', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('parallelcommand');
-            server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/start'}, function (response) {
+            var jobId = jobPail.getPailByLink('parallelcommand');
+            server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                var run_id = response.result.id;
-                server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id + '/pids' }, function (pidsResponse) {
+                var runId = response.result.id;
+                server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId + '/pids' }, function (pidsResponse) {
 
                     expect(pidsResponse).to.exist();
                 });
                 var intervalObj = setInterval(function() {
 
-                    server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (newResponse) {
+                    server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (newResponse) {
 
                         if (newResponse.result.finishTime) {
                             clearInterval(intervalObj);
-                            //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
+                            //var lastSuccessId = Store.getRunByLabel(jobId, 'lastSuccess');
                             expect(newResponse.result.id).to.exist();
                             expect(newResponse.result.finishTime).to.exist();
-                            //expect(lastSuccess_id).to.not.exist();
+                            //expect(lastSuccessId).to.not.exist();
                             done();
                         }
                     });
@@ -116,12 +116,12 @@ describe('api', function () {
         });
     });
 
-    it('DELETE /api/job/{job_id} parallelcommand', function (done) {
+    it('DELETE /api/job/{jobId} parallelcommand', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('parallelcommand');
-            server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
+            var jobId = jobPail.getPailByLink('parallelcommand');
+            server.inject({ method: 'DELETE', url: '/api/job/'+ jobId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist();
@@ -141,7 +141,7 @@ describe('api', function () {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist();
-                expect(response.result.job_id).to.not.exist();
+                expect(response.result.jobId).to.not.exist();
                 expect(response.result.err).to.exist();
                 done();
             });
@@ -171,22 +171,22 @@ describe('api', function () {
 // want to try to abort this
 // maybe background a process that runs every 1s and tries to kill the specific command by the same user?
 // generate bash script with sleep with specific name
-    it('GET /api/job/{job_id}/start sleep5', function (done) {
+    it('GET /api/job/{jobId}/start sleep5', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('sleep5');
-            server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/start'}, function (response) {
+            var jobId = jobPail.getPailByLink('sleep5');
+            server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                var run_id = response.result.id;
+                var runId = response.result.id;
                 var intervalObj = setInterval(function() {
 
-                    server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (newResponse) {
+                    server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (newResponse) {
 
                         if (newResponse.result.finishTime) {
                             clearInterval(intervalObj);
-                            //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
+                            //var lastSuccessId = Store.getRunByLabel(jobId, 'lastSuccess');
                             expect(newResponse.result.id).to.exist();
                             expect(newResponse.result.finishTime).to.exist();
                             done();
@@ -197,12 +197,12 @@ describe('api', function () {
         });
     });
 
-    it('DELETE /api/job/{job_id} sleep5', function (done) {
+    it('DELETE /api/job/{jobId} sleep5', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('sleep5');
-            server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
+            var jobId = jobPail.getPailByLink('sleep5');
+            server.inject({ method: 'DELETE', url: '/api/job/'+ jobId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist();
@@ -229,13 +229,13 @@ describe('api', function () {
         });
     });
 
-    it('PUT /api/job/{job_id} badcommand', function (done) {
+    it('PUT /api/job/{jobId} badcommand', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('badcmd');
+            var jobId = jobPail.getPailByLink('badcmd');
             var payload = { name: 'badcommand', command: 'uptim' };
-            server.inject({ method: 'PUT', url: '/api/job/'+ job_id, payload: payload }, function (response) {
+            server.inject({ method: 'PUT', url: '/api/job/'+ jobId, payload: payload }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.updateTime).to.exist();
@@ -246,27 +246,27 @@ describe('api', function () {
         });
     });
 
-    it('GET /api/job/{job_id}/start badcommand', function (done) {
+    it('GET /api/job/{jobId}/start badcommand', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('badcommand');
-            server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/start'}, function (response) {
+            var jobId = jobPail.getPailByLink('badcommand');
+            server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                var run_id = response.result.id;
+                var runId = response.result.id;
                 var intervalObj = setInterval(function() {
 
-                    server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (newResponse) {
+                    server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (newResponse) {
 
                         if (newResponse.result.finishTime) {
                             clearInterval(intervalObj);
-                            //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
-                            //var lastFail_id = Store.getRunByLabel(job_id, 'lastFail');
+                            //var lastSuccessId = Store.getRunByLabel(jobId, 'lastSuccess');
+                            //var lastFailId = Store.getRunByLabel(jobId, 'lastFail');
                             expect(newResponse.result.id).to.exist();
                             expect(newResponse.result.finishTime).to.exist();
-                            //expect(lastFail_id).to.exist();
-                            //expect(lastSuccess_id).to.not.exist();
+                            //expect(lastFailId).to.exist();
+                            //expect(lastSuccessId).to.not.exist();
                             done();
                         }
                     });
@@ -275,13 +275,13 @@ describe('api', function () {
         });
     });
 
-    it('GET /api/job/{job_id}/run/{run_id} badcommand', function (done) {
+    it('GET /api/job/{jobId}/run/{runId} badcommand', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('badcommand');
-            var run_id = server.plugins.tacklebox.getRuns(job_id)[0].id;
-            server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (response) {
+            var jobId = jobPail.getPailByLink('badcommand');
+            var runId = server.plugins.tacklebox.getRuns(jobId)[0].id;
+            server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 //expect(response.result.status).is.equal('failed');
@@ -292,12 +292,12 @@ describe('api', function () {
         });
     });
 
-    it('DELETE /api/job/{job_id} badcommand', function (done) {
+    it('DELETE /api/job/{jobId} badcommand', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('badcommand');
-            server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
+            var jobId = jobPail.getPailByLink('badcommand');
+            server.inject({ method: 'DELETE', url: '/api/job/'+ jobId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist();
@@ -329,27 +329,27 @@ describe('api', function () {
         });
     });
 
-    it('GET /api/job/{job_id}/start invalidscm', function (done) {
+    it('GET /api/job/{jobId}/start invalidscm', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('invalidscm');
-            server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/start'}, function (response) {
+            var jobId = jobPail.getPailByLink('invalidscm');
+            server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                var run_id = response.result.id;
+                var runId = response.result.id;
                 var intervalObj = setInterval(function() {
 
-                    server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (newResponse) {
+                    server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (newResponse) {
 
                         if (newResponse.result.finishTime) {
                             clearInterval(intervalObj);
-                            //var lastFail_id = Store.getRunByLabel(job_id, 'lastFail');
-                            //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
+                            //var lastFailId = Store.getRunByLabel(jobId, 'lastFail');
+                            //var lastSuccessId = Store.getRunByLabel(jobId, 'lastSuccess');
                             expect(newResponse.result.id).to.exist();
                             expect(newResponse.result.finishTime).to.exist();
-                            //expect(lastSuccess_id).to.not.exist();
-                            //expect(lastFail_id).to.exist();
+                            //expect(lastSuccessId).to.not.exist();
+                            //expect(lastFailId).to.exist();
                             done();
                         }
                     });
@@ -358,12 +358,12 @@ describe('api', function () {
         });
     });
 
-    it('DELETE /api/job/{job_id} invalidscm', function (done) {
+    it('DELETE /api/job/{jobId} invalidscm', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('invalidscm');
-            server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
+            var jobId = jobPail.getPailByLink('invalidscm');
+            server.inject({ method: 'DELETE', url: '/api/job/'+ jobId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist();
@@ -429,12 +429,12 @@ describe('api', function () {
         });
     });
 
-    it('GET /api/job/{job_id} git', function (done) {
+    it('GET /api/job/{jobId} git', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('git');
-            server.inject({ method: 'GET', url: '/api/job/'+ job_id }, function (response) {
+            var jobId = jobPail.getPailByLink('git');
+            server.inject({ method: 'GET', url: '/api/job/'+ jobId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist();
@@ -443,18 +443,18 @@ describe('api', function () {
         });
     });
 
-    it('GET /api/job/{job_id}/start git', function (done) {
+    it('GET /api/job/{jobId}/start git', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('git');
-            server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/start'}, function (response) {
+            var jobId = jobPail.getPailByLink('git');
+            server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                var run_id = response.result.id;
+                var runId = response.result.id;
                 var intervalObj = setInterval(function() {
 
-                    server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (newResponse) {
+                    server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (newResponse) {
 
                         if (newResponse.result.finishTime) {
                             clearInterval(intervalObj);
@@ -469,18 +469,18 @@ describe('api', function () {
         });
     });
 
-    it('GET /api/job/{job_id}/start noscm', function (done) {
+    it('GET /api/job/{jobId}/start noscm', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('noscm');
-            server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/start'}, function (response) {
+            var jobId = jobPail.getPailByLink('noscm');
+            server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                var run_id = response.result.id;
+                var runId = response.result.id;
                 var intervalObj = setInterval(function() {
 
-                    server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (newResponse) {
+                    server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (newResponse) {
 
                         if (newResponse.result.finishTime) {
                             clearInterval(intervalObj);
@@ -495,28 +495,28 @@ describe('api', function () {
         });
     });
 
-    it('GET /api/job/{job_id}/start noscm labels', function (done) {
+    it('GET /api/job/{jobId}/start noscm labels', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('noscm');
-            server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/start'}, function (response) {
+            var jobId = jobPail.getPailByLink('noscm');
+            server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                var run_id = response.result.id;
+                var runId = response.result.id;
                 var intervalObj = setInterval(function() {
 
-                    server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (newResponse) {
+                    server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (newResponse) {
 
                         if (newResponse.result.finishTime) {
                             clearInterval(intervalObj);
                             //console.log(JSON.stringify(run, null, 4));
-                            //var last_id = Store.getRunByLabel(job_id, 'last');
-                            //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
+                            //var lastId = Store.getRunByLabel(jobId, 'last');
+                            //var lastSuccessId = Store.getRunByLabel(jobId, 'lastSuccess');
                             expect(newResponse.result.id).to.exist();
                             expect(newResponse.result.finishTime).to.exist();
-                            //expect(response.result.run_id.toString()).to.equal(last_id);
-                            //expect(response.result.run_id.toString()).to.equal(lastSuccess_id);
+                            //expect(response.result.runId.toString()).to.equal(lastId);
+                            //expect(response.result.runId.toString()).to.equal(lastSuccessId);
                             done();
                         }
                     });
@@ -525,12 +525,12 @@ describe('api', function () {
         });
     });
 
-    it('GET /api/job/{job_id}/runs', function (done) {
+    it('GET /api/job/{jobId}/runs', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('noscm');
-            server.inject({ method: 'GET', url: '/api/job/' + job_id + '/runs'}, function (response) {
+            var jobId = jobPail.getPailByLink('noscm');
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/runs'}, function (response) {
 
                 //console.log(response.result);
                 expect(response.statusCode).to.equal(200);
@@ -540,13 +540,13 @@ describe('api', function () {
         });
     });
 
-    it('GET /api/job/{job_id}/run/{run_id} git', function (done) {
+    it('GET /api/job/{jobId}/run/{runId} git', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('git');
-            var run_id = server.plugins.tacklebox.getRuns(job_id)[0].id;
-            server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (response) {
+            var jobId = jobPail.getPailByLink('git');
+            var runId = server.plugins.tacklebox.getRuns(jobId)[0].id;
+            server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.status).to.equal('succeeded');
@@ -558,33 +558,33 @@ describe('api', function () {
         });
     });
 
-    it('GET /api/job/{job_id}/run/bylink last', function (done) {
+    it('GET /api/job/{jobId}/run/bylink last', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('git');
-            var run_id = server.plugins.tacklebox.getRuns(job_id)[0].id;
-            var lastRun = server.plugins.tacklebox.getRunByLink(job_id, 'last');
-            server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/bylink/last'}, function (response) {
+            var jobId = jobPail.getPailByLink('git');
+            var runId = server.plugins.tacklebox.getRuns(jobId)[0].id;
+            var lastRun = server.plugins.tacklebox.getRunByLink(jobId, 'last');
+            server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/bylink/last'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.status).to.equal('succeeded');
                 expect(response.result.id).to.exist();
-                expect(response.result.id).to.equal(run_id);
+                expect(response.result.id).to.equal(runId);
                 expect(response.payload).to.exist();
                 done();
             });
         });
     });
 /*
-    it('GET /api/job/{job_id}/run/{run_id}/console git', function (done) {
+    it('GET /api/job/{jobId}/run/{runId}/console git', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('git');
-            var pail = jobPail.getPail(job_id);
-            var run_id = pail.reel_id;
-            server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id + '/console' }, function (response) {
+            var jobId = jobPail.getPailByLink('git');
+            var pail = jobPail.getPail(jobId);
+            var runId = pail.reelId;
+            server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId + '/console' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.console).to.exist();
@@ -593,13 +593,13 @@ describe('api', function () {
         });
     });
 */
-    it('DELETE /api/job/{job_id}/run/{run_id} git', function (done) {
+    it('DELETE /api/job/{jobId}/run/{runId} git', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('git');
-            var run_id = server.plugins.tacklebox.getRuns(job_id)[0].id;
-            server.inject({ method: 'DELETE', url: '/api/job/'+ job_id + '/run/' + run_id }, function (response) {
+            var jobId = jobPail.getPailByLink('git');
+            var runId = server.plugins.tacklebox.getRuns(jobId)[0].id;
+            server.inject({ method: 'DELETE', url: '/api/job/'+ jobId + '/run/' + runId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist();
@@ -608,12 +608,12 @@ describe('api', function () {
         });
     });
 
-    it('DELETE /api/job/{job_id} git', function (done) {
+    it('DELETE /api/job/{jobId} git', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('git');
-            server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
+            var jobId = jobPail.getPailByLink('git');
+            server.inject({ method: 'DELETE', url: '/api/job/'+ jobId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist();
@@ -622,12 +622,12 @@ describe('api', function () {
         });
     });
 
-    it('DELETE /api/job/{job_id} noscm', function (done) {
+    it('DELETE /api/job/{jobId} noscm', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('noscm');
-            server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
+            var jobId = jobPail.getPailByLink('noscm');
+            server.inject({ method: 'DELETE', url: '/api/job/'+ jobId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist();
@@ -654,30 +654,30 @@ describe('api', function () {
         });
    });
 
-   it('GET /api/job/{job_id}/start cancel', function (done) {
+   it('GET /api/job/{jobId}/start cancel', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('cancel');
-            server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/start'}, function (response) {
+            var jobId = jobPail.getPailByLink('cancel');
+            server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                var run_id = response.result.id;
-                server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id + '/cancel' }, function (cancelResponse) {
+                var runId = response.result.id;
+                server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId + '/cancel' }, function (cancelResponse) {
 
                     expect(cancelResponse).to.exist();
                 });
                 var intervalObj = setInterval(function() {
 
-                    server.inject({ method: 'GET', url: '/api/job/'+ job_id + '/run/' + run_id }, function (newResponse) {
+                    server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (newResponse) {
 
                         if (newResponse.result.finishTime) {
                             clearInterval(intervalObj);
-                            //var lastSuccess_id = Store.getRunByLabel(job_id, 'lastSuccess');
+                            //var lastSuccessId = Store.getRunByLabel(jobId, 'lastSuccess');
                             expect(newResponse.result.id).to.exist();
                             expect(newResponse.result.finishTime).to.exist();
                             expect(newResponse.result.status).to.equal('cancelled');
-                            //expect(lastSuccess_id).to.not.exist();
+                            //expect(lastSuccessId).to.not.exist();
                             done();
                         }
                     });
@@ -686,12 +686,12 @@ describe('api', function () {
         });
     });
 
-    it('DELETE /api/job/{job_id} cancel', function (done) {
+    it('DELETE /api/job/{jobId} cancel', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var job_id = jobPail.getPailByLink('cancel');
-            server.inject({ method: 'DELETE', url: '/api/job/'+ job_id }, function (response) {
+            var jobId = jobPail.getPailByLink('cancel');
+            server.inject({ method: 'DELETE', url: '/api/job/'+ jobId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist();
