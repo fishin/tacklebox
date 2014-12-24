@@ -197,6 +197,21 @@ describe('api', function () {
         });
     });
 
+    it('DELETE /api/job/{jobId}/workspace sleep5', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var jobId = jobPail.getPailByLink('sleep5');
+            server.inject({ method: 'DELETE', url: '/api/job/'+ jobId + '/workspace' }, function (response) {
+
+                //console.log(response);
+                expect(response.statusCode).to.equal(200);
+                expect(response.payload).to.exist();
+                done();
+            });
+        });
+    });
+
     it('DELETE /api/job/{jobId} sleep5', function (done) {
 
         internals.prepareServer(function (server) {
