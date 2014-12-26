@@ -36,6 +36,7 @@ var describe = lab.describe;
 var it = lab.it;
 
 internals.prepareServer = function (callback) {
+
     var server = new Hapi.Server();
     server.connection();
 
@@ -156,7 +157,7 @@ describe('api', function () {
 
             var payload = {
                 name: 'sleep5',
-                body: 'sleep 5'
+                body: [ 'sleep 5' ]
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -231,8 +232,8 @@ describe('api', function () {
         internals.prepareServer(function (server) {
 
             var payload = {
-                name: 'badcmd',
-                body: 'uptime'
+                name: 'badcommand',
+                body: [ 'uptime' ]
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -248,14 +249,17 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('badcmd');
-            var payload = { name: 'badcommand', command: 'uptim' };
+            var jobId = jobPail.getPailByLink('badcommand');
+            var payload = {
+                name: 'badcommand',
+                body: [ 'uptim' ]
+            };
             server.inject({ method: 'PUT', url: '/api/job/'+ jobId, payload: payload }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.updateTime).to.exist();
                 expect(response.result.name).to.equal('badcommand');
-                expect(response.result.command).to.equal('uptim');
+                expect(response.result.body).to.only.include([ 'uptim' ]);
                 done();
             });
         });
@@ -327,12 +331,12 @@ describe('api', function () {
 
             var payload = {
                 name: 'invalidscm',
+                head: [ 'date' ],
                 scm: {
                     type: 'invalid'
                 },
-                head: 'date',
-                body: 'uptime',
-                tail: 'cat /etc/hosts'
+                body: [ 'uptime' ],
+                tail: [ 'cat /etc/hosts' ]
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -393,9 +397,9 @@ describe('api', function () {
 
             var payload = {
                 name: 'noscm',
-                head: 'date',
-                body: 'uptime',
-                tail: 'cat /etc/hosts'
+                head: [ 'date' ],
+                body: [ 'uptime' ],
+                tail: [ 'cat /etc/hosts' ]
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -413,14 +417,14 @@ describe('api', function () {
 
             var payload = {
                 name: 'git',
+                head: [ 'date' ],
                 scm: {
                     type: 'git',
                     url: 'https://github.com/fishin/tacklebox',
                     branch: 'master'
                 },
-                head: 'bin/head.sh',
-                body: 'bin/body.sh',
-                tail: 'bin/tail.sh'
+                body: [ 'bin/body.sh' ],
+                tail: [ 'bin/tail.sh' ]
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -714,5 +718,4 @@ describe('api', function () {
             });
         });
     });
-
 });
