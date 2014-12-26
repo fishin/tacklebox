@@ -20,6 +20,7 @@
     "joi": "5.x.x",
     "node-uuid": "1.x.x",
     "bobber": "git+https://github.com/fishin/bobber.git",
+    "brag": "git+https://github.com/fishin/brag.git",
     "reel": "git+https://github.com/fishin/reel.git",
     "pail": "git+https://github.com/fishin/pail.git"
   },
