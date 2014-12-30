@@ -93,6 +93,7 @@ describe('user', function () {
         internals.prepareServer(function (server) {
             server.inject({ method: 'GET', url: '/api/users'}, function (response) {
 
+                //console.log(response);
                 expect(response.statusCode).to.equal(200);
                 expect(response.result).to.have.length(2);
                 done();
@@ -107,7 +108,6 @@ describe('user', function () {
             server.inject({ method: 'GET', url: '/api/users'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.result).to.have.length(2);
                 var id = response.result[0].id;
                 server.inject({ method: 'GET', url: '/api/user/' + id}, function (response) {
 
@@ -128,7 +128,6 @@ describe('user', function () {
             server.inject({ method: 'GET', url: '/api/users'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.result).to.have.length(2);
                 var id = response.result[0].id;
                 var payload = { name: 'Lloyd Benson' };
                 server.inject({ method: 'POST', url: '/api/user/' + id, payload: payload}, function (response) {

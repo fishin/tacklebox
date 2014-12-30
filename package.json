@@ -1,6 +1,6 @@
 {
   "name": "tacklebox",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "restful api for ficion",
   "main": "index.js",
   "repository": {
@@ -19,6 +19,7 @@
     "hoek": "2.x.x",
     "joi": "5.x.x",
     "node-uuid": "1.x.x",
+    "angler": "git+https://github.com/fishin/angler.git",
     "bobber": "git+https://github.com/fishin/bobber.git",
     "brag": "git+https://github.com/fishin/brag.git",
     "reel": "git+https://github.com/fishin/reel.git",
