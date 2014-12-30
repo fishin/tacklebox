@@ -9,21 +9,6 @@ var internals = {
             dirpath: '/tmp/testtacklebox/job',
             workspace: 'workspace',
             configFile: 'config.json'
-        },
-        run: {
-//            dirpath: '/tmp/testtacklebox/run',
-            workspace: 'workspace',
-            configFile: 'config.json'
-        },
-        reel: {
-            dirpath: '/tmp/testtacklebox/reel',
-            workspace: 'workspace',
-            configFile: 'config.json'
-        },
-        user: {
-            dirpath: '/tmp/testtacklebox/user',
-            workspace: 'workspace',
-            configFile: 'config.json'
         }
     }
 };
