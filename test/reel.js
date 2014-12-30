@@ -44,6 +44,7 @@ describe('reel', function () {
 
             var payload = {
                 name: 'reel1',
+                host: 'localhost',
                 size: 4
             };
             server.inject({ method: 'POST', url: '/api/reel', payload: payload }, function (response) {
@@ -62,6 +63,7 @@ describe('reel', function () {
 
             var payload = {
                 name: 'reel2',
+                host: 'localhost',
                 size: 4
             };
             server.inject({ method: 'POST', url: '/api/reel', payload: payload }, function (response) {
