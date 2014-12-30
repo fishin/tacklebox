@@ -6,24 +6,10 @@ var Pail = require('pail');
 var internals = {
     defaults: {
         job: {
-            dirpath: '/tmp/testtacklebox/job',
-            workspace: 'workspace',
-            configFile: 'config.json'
-        },
-        run: {
-//            dirpath: '/tmp/testtacklebox/run',
-            workspace: 'workspace',
-            configFile: 'config.json'
+            dirpath: '/tmp/testtacklebox/job'
         },
         reel: {
-            dirpath: '/tmp/testtacklebox/reel',
-            workspace: 'workspace',
-            configFile: 'config.json'
-        },
-        user: {
-            dirpath: '/tmp/testtacklebox/user',
-            workspace: 'workspace',
-            configFile: 'config.json'
+            dirpath: '/tmp/testtacklebox/reel'
         }
     }
 };
