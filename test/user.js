@@ -17,6 +17,7 @@ var describe = lab.describe;
 var it = lab.it;
 
 internals.prepareServer = function (callback) {
+
     var server = new Hapi.Server();
     server.connection();
 
