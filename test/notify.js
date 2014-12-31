@@ -1,43 +1,91 @@
 var Code = require('code');
 var Hapi = require('hapi');
 var Lab = require('lab');
-var Notify = require('../lib/notify');
 
-var internals = {};
+var internals = {
+    defaults: {
+        apiPath: '/api',
+        notify: {
+            plugins: {
+                email: {
+                    plugin: require('brag'),
+                    options: {
+                        transporter: {
+                            service: 'gmail',
+                            auth: {
+                                user: 'lloyd.benson@gmail.com',
+                                 pass: 'password'
+                            }
+                        },
+                        from: 'donotreply@ficion.net',
+                        subjectHeader: '[ficion]'
+                    }
+                }
+            }
+        }
+    }
+};
 
 var lab = exports.lab = Lab.script();
 var expect = Code.expect;
 var describe = lab.describe;
 var it = lab.it;
 
+internals.prepareServer = function (callback) {
+
+    var server = new Hapi.Server();
+    server.connection();
+
+    server.register({
+
+        register: require('..'),
+        options: internals.defaults
+    }, function (err) {
+
+        expect(err).to.not.exist();
+        callback(server);
+    });
+};
+
 describe('notify', function () {
 
-    it('email', function (done) {
+    it('POST /api/notify email', function (done) {
 
-        var notify = {
-            type: 'email',
-            jobId: 1,
-            runId: 1,
-            subject: 'test',
-            recipients: [ 'lloydbenson@gmail.com', 'backer@gmail.com' ],
-            body: 'this is a body of text',
-            host: 'localhost',
-            port: 25
-        };
-        var expectedResult = '{"status":"success"}';
-        var status = JSON.stringify(Notify.notify(notify));
-        expect(status).to.equal(expectedResult);
-        done();
+        internals.prepareServer(function (server) {
+
+            var payload = {
+                type: 'email',
+                to: 'lloydbenson@gmail.com',
+                subject: 'test',
+                message: 'this is a body of text'
+            };
+            server.inject({ method: 'POST', url: '/api/notify', payload: payload }, function (response) {
+
+                //console.log(response.result);
+                expect(response.statusCode).to.equal(200);
+                expect(response.result.status).to.equal('failed');
+                expect(response.result.message.code).to.equal('EAUTH');
+                expect(response.result.message.responseCode).to.equal(535);
+                done();
+            });
+        });
     });
 
-    it('invalid', function (done) {
+    it('POST /api/notify invalid', function (done) {
 
-        var notify = {
-            type: 'invalid'
-        };
-        var expectedResult = '{"status":"failed","message":"no valid notify type"}';
-        var status = JSON.stringify(Notify.notify(notify));
-        expect(status).to.equal(expectedResult);
-        done();
+        internals.prepareServer(function (server) {
+
+            var payload = {
+                type: 'invalid'
+            };
+            server.inject({ method: 'POST', url: '/api/notify', payload: payload }, function (response) {
+
+                //console.log(response.result);
+                expect(response.statusCode).to.equal(200);
+                expect(response.result.status).to.equal('failed');
+                expect(response.result.message).to.equal('no valid notify type');
+                done();
+            });
+        });
     });
 });
