@@ -65,7 +65,6 @@ describe('notify', function () {
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.status).to.equal('failed');
                 expect(response.result.message.code).to.equal('EAUTH');
-                expect(response.result.message.responseCode).to.equal(535);
                 done();
             });
         });
