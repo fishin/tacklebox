@@ -680,6 +680,9 @@ describe('api', function () {
                             //var lastSuccessId = Store.getRunByLabel(jobId, 'lastSuccess');
                             expect(newResponse.result.id).to.exist();
                             expect(newResponse.result.finishTime).to.exist();
+                            expect(newResponse.result.commands).to.be.length(2);
+                            expect(newResponse.result.commands[0].startTime).to.exist();
+                            expect(newResponse.result.commands[1].startTime).to.not.exist();
                             expect(newResponse.result.status).to.equal('cancelled');
                             //expect(lastSuccessId).to.not.exist();
                             done();
