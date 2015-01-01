@@ -8,7 +8,7 @@
     "url": "https://github.com/fishin/tacklebox"
   },
   "scripts": {
-    "test": "lab -a code -t 100 -v -m 30000",
+    "test": "lab -a code -t 99 -v -m 30000",
     "json": "lab -a code -r json -t 100 -o lab.json -m 30000"
   },
   "author": "Lloyd Benson",
