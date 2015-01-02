@@ -473,6 +473,18 @@ describe('api', function () {
         });
     });
 
+    it('getWorkspaceArtifact', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var jobId = jobPail.getPailByLink('git');
+            var contents = server.plugins.tacklebox.getWorkspaceArtifact(jobId, 'bin/tail.sh');
+            expect(contents).to.contain('cat /etc/hosts');
+            done();
+        });
+    });
+
+
     it('GET /api/job/{jobId}/start noscm', function (done) {
 
         internals.prepareServer(function (server) {
