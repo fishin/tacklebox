@@ -6,7 +6,7 @@ var Pail = require('pail');
 var internals = {
     defaults: {
         user: {
-            dirpath: '/tmp/testtacklebox/user'
+            dirPath: '/tmp/testtacklebox/user'
         }
     }
 };

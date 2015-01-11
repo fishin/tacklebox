@@ -6,10 +6,10 @@ var Pail = require('pail');
 var internals = {
     defaults: {
         job: {
-            dirpath: '/tmp/testtacklebox/job'
+            dirPath: '/tmp/testtacklebox/job'
         },
         reel: {
-            dirpath: '/tmp/testtacklebox/reel'
+            dirPath: '/tmp/testtacklebox/reel'
         }
     }
 };

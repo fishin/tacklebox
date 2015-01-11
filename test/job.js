@@ -6,7 +6,7 @@ var Pail = require('pail');
 var internals = {
     defaults: {
         job: {
-            dirpath: '/tmp/testtacklebox/job',
+            dirPath: '/tmp/testtacklebox/job',
             workspace: 'workspace',
             configFile: 'config.json'
         }
