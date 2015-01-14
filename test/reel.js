@@ -1,8 +1,6 @@
 var Code = require('code');
 var Lab = require('lab');
 var Hapi = require('hapi');
-var Pail = require('pail');
-
 var internals = {
     defaults: {
         job: {
@@ -13,8 +11,6 @@ var internals = {
         }
     }
 };
-
-var jobPail = new Pail(internals.defaults.job);
 
 var lab = exports.lab = Lab.script();
 var expect = Code.expect;
