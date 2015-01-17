@@ -1,3 +1,4 @@
+var Bait = require('bait');
 var Code = require('code');
 var Lab = require('lab');
 var Hapi = require('hapi');
@@ -12,8 +13,6 @@ var internals = {
         }
     }
 };
-
-var jobPail = new Pail(internals.defaults.job);
 
 var lab = exports.lab = Lab.script();
 var expect = Code.expect;
@@ -60,11 +59,12 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('parallelcommand');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('parallelcommand').id;
             server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                var runId = response.result.id;
+                var runId = response.result;
                 server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId + '/pids' }, function (pidsResponse) {
 
                     expect(pidsResponse).to.exist();
@@ -75,7 +75,6 @@ describe('api', function () {
 
                         if (newResponse.result.finishTime) {
                             clearInterval(intervalObj);
-                            //var lastSuccessId = Store.getRunByLabel(jobId, 'lastSuccess');
                             expect(newResponse.result.id).to.exist();
                             expect(newResponse.result.finishTime).to.exist();
                             //expect(lastSuccessId).to.not.exist();
@@ -106,7 +105,8 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('parallelcommand');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('parallelcommand').id;
             server.inject({ method: 'DELETE', url: '/api/job/'+ jobId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -115,26 +115,6 @@ describe('api', function () {
             });
         });
     });
-/*
-   it('POST /api/job missingcommand', function (done) {
-
-        internals.prepareServer(function (server) {
-
-            var payload = {
-                name: 'missingcommand'
-            };
-            server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
-
-                expect(response.statusCode).to.equal(200);
-                expect(response.payload).to.exist();
-                expect(response.result.jobId).to.not.exist();
-                expect(response.result.err).to.exist();
-                done();
-            });
-        });
-   });
-
-*/
 
    it('POST /api/job sleep5', function (done) {
 
@@ -161,11 +141,12 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('sleep5');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('sleep5').id;
             server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                var runId = response.result.id;
+                var runId = response.result;
                 var intervalObj = setInterval(function() {
 
                     server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (newResponse) {
@@ -187,7 +168,8 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('sleep5');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('sleep5').id;
             server.inject({ method: 'DELETE', url: '/api/job/'+ jobId + '/workspace' }, function (response) {
 
                 //console.log(response);
@@ -202,7 +184,8 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('sleep5');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('sleep5').id;
             server.inject({ method: 'DELETE', url: '/api/job/'+ jobId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -234,7 +217,8 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('badcommand');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('badcommand').id;
             var payload = {
                 name: 'badcommand',
                 body: [ 'uptim' ]
@@ -254,11 +238,12 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('badcommand');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('badcommand').id;
             server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                var runId = response.result.id;
+                var runId = response.result;
                 var intervalObj = setInterval(function() {
 
                     server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (newResponse) {
@@ -283,8 +268,9 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('badcommand');
-            var runId = server.plugins.tacklebox.getRuns(jobId)[0].id;
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('badcommand').id;
+            var runId = bait.getRuns(jobId)[0];
             server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -300,7 +286,8 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('badcommand');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('badcommand').id;
             server.inject({ method: 'DELETE', url: '/api/job/'+ jobId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -337,11 +324,12 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('invalidscm');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('invalidscm').id;
             server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                var runId = response.result.id;
+                var runId = response.result;
                 var intervalObj = setInterval(function() {
 
                     server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (newResponse) {
@@ -366,7 +354,8 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('invalidscm');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('invalidscm').id;
             server.inject({ method: 'DELETE', url: '/api/job/'+ jobId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -437,7 +426,8 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('git');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('git').id;
             server.inject({ method: 'GET', url: '/api/job/'+ jobId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -451,11 +441,12 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('git');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('git').id;
             server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                var runId = response.result.id;
+                var runId = response.result;
                 var intervalObj = setInterval(function() {
 
                     server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (newResponse) {
@@ -477,8 +468,9 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('git');
-            var contents = server.plugins.tacklebox.getWorkspaceArtifact(jobId, 'bin/tail.sh');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('git').id;
+            var contents = bait.getWorkspaceArtifact(jobId, 'bin/tail.sh');
             expect(contents).to.contain('cat /etc/hosts');
             done();
         });
@@ -489,11 +481,12 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('noscm');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('noscm').id;
             server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                var runId = response.result.id;
+                var runId = response.result;
                 var intervalObj = setInterval(function() {
 
                     server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (newResponse) {
@@ -515,11 +508,12 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('noscm');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('noscm').id;
             server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                var runId = response.result.id;
+                var runId = response.result;
                 var intervalObj = setInterval(function() {
 
                     server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (newResponse) {
@@ -545,7 +539,8 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('noscm');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('noscm').id;
             server.inject({ method: 'GET', url: '/api/job/' + jobId + '/runs'}, function (response) {
 
                 //console.log(response.result);
@@ -560,8 +555,9 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('git');
-            var runId = server.plugins.tacklebox.getRuns(jobId)[0].id;
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('git').id;
+            var runId = bait.getRuns(jobId)[0];
             server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -578,9 +574,10 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('git');
-            var runId = server.plugins.tacklebox.getRuns(jobId)[0].id;
-            var lastRun = server.plugins.tacklebox.getRunByLink(jobId, 'last');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('git').id;
+            var runId = bait.getRuns(jobId)[0];
+            var lastRun = bait.getRunByName(jobId, 'last');
             server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/bylink/last'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -592,29 +589,14 @@ describe('api', function () {
             });
         });
     });
-/*
-    it('GET /api/job/{jobId}/run/{runId}/console git', function (done) {
 
-        internals.prepareServer(function (server) {
-
-            var jobId = jobPail.getPailByLink('git');
-            var pail = jobPail.getPail(jobId);
-            var runId = pail.reelId;
-            server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId + '/console' }, function (response) {
-
-                expect(response.statusCode).to.equal(200);
-                expect(response.result.console).to.exist();
-                done();
-            });
-        });
-    });
-*/
     it('DELETE /api/job/{jobId}/run/{runId} git', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('git');
-            var runId = server.plugins.tacklebox.getRuns(jobId)[0].id;
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('git').id;
+            var runId = bait.getRuns(jobId)[0];
             server.inject({ method: 'DELETE', url: '/api/job/'+ jobId + '/run/' + runId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -628,7 +610,8 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('git');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('git').id;
             server.inject({ method: 'DELETE', url: '/api/job/'+ jobId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -642,7 +625,8 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('noscm');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('noscm').id;
             server.inject({ method: 'DELETE', url: '/api/job/'+ jobId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -674,11 +658,12 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('cancel');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('cancel').id;
             server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/start'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                var runId = response.result.id;
+                var runId = response.result;
                 server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId + '/cancel' }, function (cancelResponse) {
 
                     expect(cancelResponse).to.exist();
@@ -709,7 +694,8 @@ describe('api', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = jobPail.getPailByLink('cancel');
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('cancel').id;
             server.inject({ method: 'DELETE', url: '/api/job/'+ jobId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
