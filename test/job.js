@@ -86,11 +86,11 @@ describe('api', function () {
         });
     });
 
-   it('GET /api/job/bylink parallelcommand', function (done) {
+   it('GET /api/job/byname parallelcommand', function (done) {
 
         internals.prepareServer(function (server) {
 
-            server.inject({ method: 'GET', url: '/api/job/bylink/parallelcommand'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/job/byname/parallelcommand'}, function (response) {
 
                 //console.log(response);
                 expect(response.statusCode).to.equal(200);
@@ -570,7 +570,7 @@ describe('api', function () {
         });
     });
 
-    it('GET /api/job/{jobId}/run/bylink last', function (done) {
+    it('GET /api/job/{jobId}/run/byname last', function (done) {
 
         internals.prepareServer(function (server) {
 
@@ -578,7 +578,7 @@ describe('api', function () {
             var jobId = bait.getJobByName('git').id;
             var runId = bait.getRuns(jobId)[0];
             var lastRun = bait.getRunByName(jobId, 'last');
-            server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/bylink/last'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/byname/last'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.status).to.equal('succeeded');

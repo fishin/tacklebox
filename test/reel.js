@@ -73,11 +73,11 @@ describe('reel', function () {
     });
 
 
-   it('GET /api/reel/bylink reel1', function (done) {
+   it('GET /api/reel/byname reel1', function (done) {
 
         internals.prepareServer(function (server) {
 
-            server.inject({ method: 'GET', url: '/api/reel/bylink/reel1'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/reel/byname/reel1'}, function (response) {
 
                 //console.log(response);
                 expect(response.statusCode).to.equal(200);
