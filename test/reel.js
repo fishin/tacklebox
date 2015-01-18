@@ -1,6 +1,7 @@
 var Code = require('code');
 var Lab = require('lab');
 var Hapi = require('hapi');
+
 var internals = {
     defaults: {
         job: {

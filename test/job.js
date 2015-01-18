@@ -2,7 +2,6 @@ var Bait = require('bait');
 var Code = require('code');
 var Lab = require('lab');
 var Hapi = require('hapi');
-var Pail = require('pail');
 
 var internals = {
     defaults: {
