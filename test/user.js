@@ -5,7 +5,7 @@ var Hapi = require('hapi');
 var internals = {
     defaults: {
         user: {
-            dirPath: '/tmp/testtacklebox/user'
+            dirPath: __dirname + '/tmp/user'
         }
     }
 };

@@ -6,7 +6,7 @@ var Hapi = require('hapi');
 var internals = {
     defaults: {
         job: {
-            dirPath: '/tmp/testtacklebox/job',
+            dirPath: __dirname + '/tmp/job',
             workspace: 'workspace',
             configFile: 'config.json'
         }

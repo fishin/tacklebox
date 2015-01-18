@@ -5,10 +5,10 @@ var Hapi = require('hapi');
 var internals = {
     defaults: {
         job: {
-            dirPath: '/tmp/testtacklebox/job'
+            dirPath: __dirname + '/tmp/job'
         },
         reel: {
-            dirPath: '/tmp/testtacklebox/reel'
+            dirPath: __dirname + '/tmp/reel'
         }
     }
 };
