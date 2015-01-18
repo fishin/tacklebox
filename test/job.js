@@ -270,7 +270,7 @@ describe('api', function () {
 
             var bait = new Bait(internals.defaults.job);
             var jobId = bait.getJobByName('badcommand').id;
-            var runId = bait.getRuns(jobId)[0];
+            var runId = bait.getRuns(jobId)[0].id;
             server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -557,7 +557,7 @@ describe('api', function () {
 
             var bait = new Bait(internals.defaults.job);
             var jobId = bait.getJobByName('git').id;
-            var runId = bait.getRuns(jobId)[0];
+            var runId = bait.getRuns(jobId)[0].id;
             server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -576,7 +576,7 @@ describe('api', function () {
 
             var bait = new Bait(internals.defaults.job);
             var jobId = bait.getJobByName('git').id;
-            var runId = bait.getRuns(jobId)[0];
+            var runId = bait.getRuns(jobId)[0].id;
             var lastRun = bait.getRunByName(jobId, 'last');
             server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/byname/last'}, function (response) {
 
@@ -596,7 +596,7 @@ describe('api', function () {
 
             var bait = new Bait(internals.defaults.job);
             var jobId = bait.getJobByName('git').id;
-            var runId = bait.getRuns(jobId)[0];
+            var runId = bait.getRuns(jobId)[0].id;
             server.inject({ method: 'DELETE', url: '/api/job/'+ jobId + '/run/' + runId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
