@@ -391,6 +391,9 @@ describe('api', function () {
             var payload = {
                 name: 'git',
                 head: [ 'date' ],
+                archive: {
+                    pattern: 'package.json'
+                },
                 scm: {
                     type: 'git',
                     url: 'https://github.com/fishin/tacklebox',
@@ -401,6 +404,7 @@ describe('api', function () {
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
+                //console.log(response)
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist();
                 expect(response.result.id).to.exist();
@@ -475,6 +479,22 @@ describe('api', function () {
         });
     });
 
+    it('getArchiveArtifact', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('git').id;
+            var runId = bait.getRuns(jobId)[0].id;
+            var artifact = 'package.json';
+            server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId + '/archive/' + artifact }, function (response) {
+
+                //console.log(response.result);
+                expect(JSON.parse(response.result).name).to.equal('tacklebox');
+                done();
+            });
+        });
+    });
 
     it('GET /api/job/{jobId}/start noscm', function (done) {
 
