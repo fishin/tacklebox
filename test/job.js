@@ -569,6 +569,23 @@ describe('api', function () {
         });
     });
 
+    it('GET /api/job/{jobId}/commits', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('git').id;
+            var runId = bait.getRuns(jobId)[0].id;
+            server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/commits' }, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                expect(response.payload).to.exist();
+                expect(response.result.length).to.above(0);
+                done();
+            });
+        });
+    });
+
     it('GET /api/job/{jobId}/run/byname last', function (done) {
 
         internals.prepareServer(function (server) {
