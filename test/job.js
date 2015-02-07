@@ -313,52 +313,7 @@ describe('api', function () {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist();
-                expect(response.result.id).to.exist();
-                done();
-            });
-        });
-    });
-
-    it('GET /api/job/{jobId}/start invalidscm', function (done) {
-
-        internals.prepareServer(function (server) {
-
-            var bait = new Bait(internals.defaults.job);
-            var jobId = bait.getJobByName('invalidscm').id;
-            server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/start'}, function (response) {
-
-                expect(response.statusCode).to.equal(200);
-                var runId = response.result;
-                var intervalObj = setInterval(function() {
-
-                    server.inject({ method: 'GET', url: '/api/job/'+ jobId + '/run/' + runId }, function (newResponse) {
-
-                        if (newResponse.result.finishTime) {
-                            clearInterval(intervalObj);
-                            //var lastFailId = Store.getRunByLabel(jobId, 'lastFail');
-                            //var lastSuccessId = Store.getRunByLabel(jobId, 'lastSuccess');
-                            expect(newResponse.result.id).to.exist();
-                            expect(newResponse.result.finishTime).to.exist();
-                            //expect(lastSuccessId).to.not.exist();
-                            //expect(lastFailId).to.exist();
-                            done();
-                        }
-                    });
-                }, 1000);
-            });
-        });
-    });
-
-    it('DELETE /api/job/{jobId} invalidscm', function (done) {
-
-        internals.prepareServer(function (server) {
-
-            var bait = new Bait(internals.defaults.job);
-            var jobId = bait.getJobByName('invalidscm').id;
-            server.inject({ method: 'DELETE', url: '/api/job/'+ jobId }, function (response) {
-
-                expect(response.statusCode).to.equal(200);
-                expect(response.payload).to.exist();
+                expect(response.result.id).to.not.exist();
                 done();
             });
         });
