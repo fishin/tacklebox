@@ -25,8 +25,9 @@
     "angler": "git+https://github.com/fishin/angler.git",
     "bait": "git+https://github.com/fishin/bait.git",
     "brag": "git+https://github.com/fishin/brag.git",
+    "pail": "git+https://github.com/fishin/pail.git",
     "reel": "git+https://github.com/fishin/reel.git",
-    "pail": "git+https://github.com/fishin/pail.git"
+    "fishhook": "git+https://github.com/fishin/fishhook.git"
   },
   "devDependencies": {
     "code": "1.x.x",
