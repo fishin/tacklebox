@@ -33,6 +33,23 @@ internals.prepareServer = function (callback) {
 
 describe('user', function () {    
 
+    it('POST /api/password', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var payload = {
+                password: 'password'
+            };
+            server.inject({ method: 'POST', url: '/api/password', payload: payload }, function (response) {
+
+                //console.log(response.result);
+                expect(response.statusCode).to.equal(200);
+                expect(response.result.length).to.equal(60);
+                done();
+            });
+        });
+    });
+
     it('POST /api/user lloyd', function (done) {
 
         internals.prepareServer(function (server) {
@@ -40,7 +57,8 @@ describe('user', function () {
             var payload = {
                 username: 'lloyd',
                 name: 'Lloyd Benson1',
-                email: 'lloyd.benson@gmail.com'
+                email: 'lloyd.benson@gmail.com',
+                password: 'password'
             };
             server.inject({ method: 'POST', url: '/api/user', payload: payload }, function (response) {
 
@@ -59,7 +77,8 @@ describe('user', function () {
             var payload = {
                 username: 'backer',
                 name: 'Ben Acker',
-                email: 'ben.acker@gmail.com'
+                email: 'ben.acker@gmail.com',
+                password: 'password'
             };
             server.inject({ method: 'POST', url: '/api/user', payload: payload }, function (response) {
 
