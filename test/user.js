@@ -50,6 +50,20 @@ describe('user', function () {
         });
     });
 
+    it('GET /api/password/{length}', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            server.inject({ method: 'GET', url: '/api/password/10'}, function (response) {
+
+                //console.log(response.result);
+                expect(response.statusCode).to.equal(200);
+                expect(response.result.length).to.equal(10);
+                done();
+            });
+        });
+    });
+
     it('POST /api/user lloyd', function (done) {
 
         internals.prepareServer(function (server) {
