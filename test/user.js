@@ -69,8 +69,9 @@ describe('user', function () {
         internals.prepareServer(function (server) {
 
             var payload = {
-                username: 'lloyd',
-                name: 'Lloyd Benson1',
+                name: 'lloyd',
+                type: 'local',
+                displayName: 'Lloyd Benson1',
                 email: 'lloyd.benson@gmail.com',
                 password: 'password'
             };
@@ -89,8 +90,9 @@ describe('user', function () {
         internals.prepareServer(function (server) {
 
             var payload = {
-                username: 'backer',
-                name: 'Ben Acker',
+                name: 'backer',
+                type: 'local',
+                displayName: 'Ben Acker',
                 email: 'ben.acker@gmail.com',
                 password: 'password'
             };
@@ -129,7 +131,7 @@ describe('user', function () {
 
                     //console.log(response.result);
                     expect(response.result.id).to.exist();
-                    expect(response.result.name).to.equal('Lloyd Benson1');
+                    expect(response.result.displayName).to.equal('Lloyd Benson1');
                     expect(response.statusCode).to.equal(200);
                     done();
                 });
