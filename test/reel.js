@@ -33,7 +33,7 @@ internals.prepareServer = function (callback) {
     });
 };
 
-describe('reel', function () {    
+describe('reel', function () {
 
     it('POST /api/reel reel1', function (done) {
 

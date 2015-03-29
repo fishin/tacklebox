@@ -31,7 +31,7 @@ internals.prepareServer = function (callback) {
     });
 };
 
-describe('user', function () {    
+describe('user', function () {
 
     it('POST /api/password', function (done) {
 
