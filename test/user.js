@@ -139,6 +139,22 @@ describe('user', function () {
         });
     });
 
+    it('GET /api/user/byname/{name} lloyd', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            server.inject({ method: 'GET', url: '/api/user/byname/lloyd'}, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                //console.log(response.result);
+                expect(response.result.id).to.exist();
+                expect(response.result.name).to.equal('lloyd');
+                expect(response.statusCode).to.equal(200);
+                done();
+            });
+        });
+    });
+
     it('POST /api/user/{id}', function (done) {
 
         internals.prepareServer(function (server) {
