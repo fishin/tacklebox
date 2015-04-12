@@ -42,6 +42,7 @@ describe('reel', function () {
             var payload = {
                 name: 'reel1',
                 host: 'localhost',
+                port: 8081,
                 size: 4
             };
             server.inject({ method: 'POST', url: '/api/reel', payload: payload }, function (response) {
@@ -61,6 +62,7 @@ describe('reel', function () {
             var payload = {
                 name: 'reel2',
                 host: 'localhost',
+                port: 8082,
                 size: 4
             };
             server.inject({ method: 'POST', url: '/api/reel', payload: payload }, function (response) {
