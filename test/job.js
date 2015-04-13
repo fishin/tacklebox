@@ -34,7 +34,7 @@ internals.prepareServer = function (callback) {
     });
 };
 
-describe('api', function () {
+describe('job', function () {
 
   it('POST /api/job parallelcommand', function (done) {
 
