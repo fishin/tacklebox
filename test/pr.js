@@ -99,6 +99,27 @@ describe('pr', function () {
         });
     });
 
+    it('DELETE /api/job/{jobId}/pr/{number}', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('prs').id;
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/prs' }, function (response) {
+
+                //console.log(response.result);
+                expect(response.statusCode).to.equal(200);
+                expect(response.result.length).to.be.above(0);
+                var number = response.result[0].number;
+                server.inject({ method: 'DELETE', url: '/api/job/' + jobId + '/pr/' + number }, function (response) {
+
+                    expect(response.statusCode).to.equal(200);
+                    done();
+                });
+            });
+        });
+    });
+
     it('DELETE /api/job/{jobId} prs', function (done) {
 
         internals.prepareServer(function (server) {
