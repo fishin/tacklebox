@@ -120,7 +120,7 @@ describe('pr', function () {
                     var runId = response.result;
                     server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/pids' }, function (newResponse) {
 
-                        console.log(newResponse);
+                        //console.log(newResponse);
                         expect(newResponse.result.length).to.equal(1);
                         expect(newResponse.result[0]).to.be.a.number();
                         done();
