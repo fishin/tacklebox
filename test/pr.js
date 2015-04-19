@@ -136,12 +136,16 @@ describe('pr', function () {
                 server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response) {
 
                     var runId = response.result[0].id;
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/pids' }, function (response) {
+                    // travis seemed to be slow here
+                    setTimeout(function() {
 
-                        expect(response.result.length).to.equal(1);
-                        expect(response.result[0]).to.be.a.number();
-                        done();
-                    });
+                        server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/pids' }, function (response) {
+
+                            expect(response.result.length).to.equal(1);
+                            expect(response.result[0]).to.be.a.number();
+                            done();
+                        });
+                    }, 1000);
                 });
             });
         });
