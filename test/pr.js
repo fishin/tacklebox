@@ -117,12 +117,86 @@ describe('pr', function () {
 
                     //console.log(response.result);
                     expect(response.statusCode).to.equal(200);
-                    var runId = response.result;
+                    done();
+                });
+            });
+        });
+    });
+
+    it('GET /api/job/{jobId}/pr/{number}/runs', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('prs').id;
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/prs' }, function (response) {
+
+                //console.log(response.result);
+                expect(response.statusCode).to.equal(200);
+                expect(response.result.length).to.be.above(0);
+                var number = response.result[0].number;
+                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response) {
+
+                    expect(response.result.length).to.equal(1);
+                    done();
+                });
+            });
+        });
+    });
+
+    it('GET /api/job/{jobId}/pr/{number}/run/{runId}/pids', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('prs').id;
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/prs' }, function (response) {
+
+                //console.log(response.result);
+                expect(response.statusCode).to.equal(200);
+                expect(response.result.length).to.be.above(0);
+                var number = response.result[0].number;
+                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response) {
+
+                    expect(response.statusCode).to.equal(200);
+                    expect(response.result.length).to.equal(1);
+                    //console.log(response.result);
+                    var runId = response.result[0].id;
                     server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/pids' }, function (newResponse) {
 
                         //console.log(newResponse);
                         expect(newResponse.result.length).to.equal(1);
                         expect(newResponse.result[0]).to.be.a.number();
+                        done();
+                    });
+                });
+            });
+        });
+    });
+
+    it('GET /api/job/{jobId}/pr/{number}/run/{runId}/cancel', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('prs').id;
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/prs' }, function (response) {
+
+                //console.log(response.result);
+                expect(response.statusCode).to.equal(200);
+                expect(response.result.length).to.be.above(0);
+                var number = response.result[0].number;
+                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response) {
+
+                    expect(response.statusCode).to.equal(200);
+                    expect(response.result.length).to.equal(1);
+                    //console.log(response.result);
+                    var runId = response.result[0].id;
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/cancel' }, function (newResponse) {
+
+                        //console.log(newResponse);
+                        //expect(newResponse.result.length).to.equal(1);
+                        //expect(newResponse.result[0]).to.be.a.number();
                         done();
                     });
                 });
@@ -151,8 +225,8 @@ describe('pr', function () {
 
                             if (newResponse.result.finishTime) {
                                 clearInterval(intervalObj);
-                                //var lastSuccessId = Store.getRunByLabel(jobId, 'lastSuccess');
                                 expect(newResponse.result.id).to.exist();
+                                expect(newResponse.result.status).to.equal('cancelled');
                                 expect(newResponse.result.finishTime).to.exist();
                                 done();
                             }
