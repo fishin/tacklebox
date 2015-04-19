@@ -1,14 +1,16 @@
 var Bait = require('bait');
 var Code = require('code');
-var Lab = require('lab');
 var Hapi = require('hapi');
+var Lab = require('lab');
+var Mock = require('mock');
 
 var internals = {
     defaults: {
         job: {
             dirPath: __dirname + '/tmp/job',
             workspace: 'workspace',
-            configFile: 'config.json'
+            configFile: 'config.json',
+            mock: true
         }
     }
 };
