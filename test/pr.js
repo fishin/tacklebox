@@ -116,10 +116,11 @@ describe('pr', function () {
                     //console.log(response.result);
                     expect(response.statusCode).to.equal(200);
                     var runId = response.result;
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/pids' }, function (response) {
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/pids' }, function (newResponse) {
 
-                        expect(response.result.length).to.equal(1);
-                        expect(response.result[0]).to.be.a.number();
+                        console.log(newResponse);
+                        expect(newResponse.result.length).to.equal(1);
+                        expect(newResponse.result[0]).to.be.a.number();
                         done();
                     });
                 });
