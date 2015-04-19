@@ -107,13 +107,13 @@ describe('pr', function () {
             var jobId = bait.getJobByName('prs').id;
             server.inject({ method: 'GET', url: '/api/job/' + jobId + '/prs' }, function (response) {
 
-                //console.log(response.result);
+                console.log(response.result);
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.length).to.be.above(0);
                 var number = response.result[0].number;
                 server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/start' }, function (response) {
 
-                    //console.log(response.result);
+                    console.log(response.result);
                     expect(response.statusCode).to.equal(200);
                     done();
                 });
@@ -135,17 +135,14 @@ describe('pr', function () {
                 var number = response.result[0].number;
                 server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response) {
 
+                    expect(response.statusCode).to.equal(200);
                     var runId = response.result[0].id;
-                    // travis seemed to be slow here
-                    setTimeout(function() {
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/pids' }, function (response) {
 
-                        server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/pids' }, function (response) {
-
-                            expect(response.result.length).to.equal(1);
-                            expect(response.result[0]).to.be.a.number();
-                            done();
-                        });
-                    }, 1000);
+                        expect(response.result.length).to.equal(1);
+                        expect(response.result[0]).to.be.a.number();
+                        done();
+                    });
                 });
             });
         });
