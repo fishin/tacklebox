@@ -541,6 +541,26 @@ describe('job', function () {
         });
     });
 
+    it('POST /api/job/{jobId}/commits/compare', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('git').id;
+            var payload = {
+                commit1: bait.getRuns(jobId)[0].commit,
+                commit2: bait.getRuns(jobId)[0].commit
+            };
+            server.inject({ method: 'POST', url: '/api/job/' + jobId + '/commits/compare', payload: payload }, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                expect(response.payload).to.exist();
+                expect(response.result.length).to.equal(0);
+                done();
+            });
+        });
+    });
+
     it('GET /api/job/{jobId}/run/byname last', function (done) {
 
         internals.prepareServer(function (server) {
