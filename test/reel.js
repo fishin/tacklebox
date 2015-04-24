@@ -19,6 +19,7 @@ var describe = lab.describe;
 var it = lab.it;
 
 internals.prepareServer = function (callback) {
+
     var server = new Hapi.Server();
     server.connection();
 
@@ -76,7 +77,7 @@ describe('reel', function () {
     });
 
 
-   it('GET /api/reel/byname reel1', function (done) {
+    it('GET /api/reel/byname reel1', function (done) {
 
         internals.prepareServer(function (server) {
 
@@ -94,6 +95,7 @@ describe('reel', function () {
     it('GET /api/reels', function (done) {
 
         internals.prepareServer(function (server) {
+
             server.inject({ method: 'GET', url: '/api/reels'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);

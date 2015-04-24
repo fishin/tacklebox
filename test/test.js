@@ -73,7 +73,7 @@ describe('test', function () {
 
                 expect(response.statusCode).to.equal(200);
                 var runId = response.result;
-                var intervalObj = setInterval(function() {
+                var intervalObj = setInterval(function () {
 
                     server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (newResponse) {
 

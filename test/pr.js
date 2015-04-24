@@ -219,7 +219,7 @@ describe('pr', function () {
                 server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response) {
 
                     var runId = response.result[0].id;
-                    var intervalObj = setInterval(function() {
+                    var intervalObj = setInterval(function () {
 
                         server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId }, function (newResponse) {
 
@@ -231,7 +231,7 @@ describe('pr', function () {
                                 done();
                             }
                         });
-                     }, 1000);
+                    }, 1000);
                 });
             });
         });

@@ -36,7 +36,7 @@ internals.prepareServer = function (callback) {
 
 describe('job', function () {
 
-  it('POST /api/job parallelcommand', function (done) {
+    it('POST /api/job parallelcommand', function (done) {
 
         internals.prepareServer(function (server) {
 
@@ -52,9 +52,9 @@ describe('job', function () {
                 done();
             });
         });
-   });
+    });
 
-   it('GET /api/job/{jobId}/start parallelcommand', function (done) {
+    it('GET /api/job/{jobId}/start parallelcommand', function (done) {
 
         internals.prepareServer(function (server) {
 
@@ -68,7 +68,7 @@ describe('job', function () {
 
                     expect(pidsResponse).to.exist();
                 });
-                var intervalObj = setInterval(function() {
+                var intervalObj = setInterval(function () {
 
                     server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (newResponse) {
 
@@ -85,7 +85,7 @@ describe('job', function () {
         });
     });
 
-   it('GET /api/job/byname parallelcommand', function (done) {
+    it('GET /api/job/byname parallelcommand', function (done) {
 
         internals.prepareServer(function (server) {
 
@@ -115,7 +115,7 @@ describe('job', function () {
         });
     });
 
-   it('POST /api/job sleep5', function (done) {
+    it('POST /api/job sleep5', function (done) {
 
         internals.prepareServer(function (server) {
 
@@ -146,7 +146,7 @@ describe('job', function () {
 
                 expect(response.statusCode).to.equal(200);
                 var runId = response.result;
-                var intervalObj = setInterval(function() {
+                var intervalObj = setInterval(function () {
 
                     server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (newResponse) {
 
@@ -243,7 +243,7 @@ describe('job', function () {
 
                 expect(response.statusCode).to.equal(200);
                 var runId = response.result;
-                var intervalObj = setInterval(function() {
+                var intervalObj = setInterval(function () {
 
                     server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (newResponse) {
 
@@ -368,6 +368,7 @@ describe('job', function () {
     it('GET /api/jobs', function (done) {
 
         internals.prepareServer(function (server) {
+
             server.inject({ method: 'GET', url: '/api/jobs'}, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -402,7 +403,7 @@ describe('job', function () {
 
                 expect(response.statusCode).to.equal(200);
                 var runId = response.result;
-                var intervalObj = setInterval(function() {
+                var intervalObj = setInterval(function () {
 
                     server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (newResponse) {
 
@@ -441,7 +442,7 @@ describe('job', function () {
 
                 expect(response.statusCode).to.equal(200);
                 var runId = response.result;
-                var intervalObj = setInterval(function() {
+                var intervalObj = setInterval(function () {
 
                     server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (newResponse) {
 
@@ -468,7 +469,7 @@ describe('job', function () {
 
                 expect(response.statusCode).to.equal(200);
                 var runId = response.result;
-                var intervalObj = setInterval(function() {
+                var intervalObj = setInterval(function () {
 
                     server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (newResponse) {
 
@@ -627,7 +628,7 @@ describe('job', function () {
         });
     });
 
-  it('POST /api/job parallelcommand cancel', function (done) {
+    it('POST /api/job parallelcommand cancel', function (done) {
 
         internals.prepareServer(function (server) {
 
@@ -643,9 +644,9 @@ describe('job', function () {
                 done();
             });
         });
-   });
+    });
 
-   it('GET /api/job/{jobId}/start cancel', function (done) {
+    it('GET /api/job/{jobId}/start cancel', function (done) {
 
         internals.prepareServer(function (server) {
 
@@ -659,7 +660,7 @@ describe('job', function () {
 
                     expect(cancelResponse).to.exist();
                 });
-                var intervalObj = setInterval(function() {
+                var intervalObj = setInterval(function () {
 
                     server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (newResponse) {
 

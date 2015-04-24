@@ -109,6 +109,7 @@ describe('user', function () {
     it('GET /api/users', function (done) {
 
         internals.prepareServer(function (server) {
+
             server.inject({ method: 'GET', url: '/api/users'}, function (response) {
 
                 //console.log(response);
