@@ -137,6 +137,47 @@ describe('pr mock', function () {
             });
         });
     });
+
+    it('GET /api/job/{jobId}/pr/{number}/merge', function (done) {
+
+        var type = 'github';
+        var routes = [
+            {
+                method: 'put',
+                path: '/repos/org/repo/pulls/1/merge',
+                file: 'index.json'
+            },
+            {
+                method: 'get',
+                path: '/rate_limit',
+                file: 'authorized.json'
+            }
+        ];
+        Mock.prepareServer(type, routes, function (mockServer) {
+
+            mockServer.start(function () {
+
+                internals.defaults.job.github = {
+                    url: mockServer.info.uri
+                };
+                internals.prepareServer(function (server) {
+
+                    var bait = new Bait(internals.defaults.job);
+                    var jobId = bait.getJobByName('prs').id;
+                    var number = 1;
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/merge' }, function (response) {
+
+                        //console.log(response.result);
+                        expect(response.statusCode).to.equal(200);
+                        expect(response.result.sha.length).to.equal(40);
+                        expect(response.result.merged).to.be.true();
+                        expect(response.result.message).to.equal('Pull Request successfully merged');
+                        done();
+                    });
+                });
+            });
+        });
+    });
 /*
 
     it('GET /api/job/{jobId}/pr/{number}/start', function (done) {
