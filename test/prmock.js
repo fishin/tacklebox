@@ -36,7 +36,7 @@ internals.prepareServer = function (callback) {
     });
 };
 
-describe('pr', function () {
+describe('pr mock', function () {
 
     it('POST /api/job prs', function (done) {
 
@@ -46,18 +46,133 @@ describe('pr', function () {
                 name: 'prs',
                 scm: {
                     type: 'git',
-                    url: 'https://github.com/fishin/demo',
+                    url: 'https://github.com/org/repo',
                     branch: 'master'
                 },
                 body: [ 'npm install', 'npm test' ]
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
-                //console.log(response)
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist();
                 expect(response.result.id).to.exist();
                 done();
+            });
+        });
+    });
+
+    it('GET /api/job/{jobId}/prs', function (done) {
+
+        var type = 'github';
+        var routes = [
+            {
+                method: 'get',
+                path: '/repos/org/repo/pulls',
+                file: 'index.json'
+            },
+            {
+                method: 'get',
+                path: '/rate_limit',
+                file: 'anonymous.json'
+            }
+        ];
+        Mock.prepareServer(type, routes, function (mockServer) {
+
+            mockServer.start(function () {
+
+                internals.defaults.job.github = {
+                    url: mockServer.info.uri
+                };
+                var bait = new Bait(internals.defaults.job);
+                var jobId = bait.getJobByName('prs').id;
+                internals.prepareServer(function (server) {
+
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/prs' }, function (response) {
+
+                        //console.log(response.result);
+                        expect(response.statusCode).to.equal(200);
+                        expect(response.result.length).to.be.above(0);
+                        done();
+                    });
+                });
+            });
+        });
+    });
+
+    it('GET /api/job/{jobId}/pr/{number}', function (done) {
+
+        var type = 'github';
+        var routes = [
+            {
+                method: 'get',
+                path: '/repos/org/repo/pulls/1',
+                file: 'index.json'
+            },
+            {
+                method: 'get',
+                path: '/rate_limit',
+                file: 'anonymous.json'
+            }
+        ];
+        Mock.prepareServer(type, routes, function (mockServer) {
+
+            mockServer.start(function () {
+
+                internals.defaults.job.github = {
+                    url: mockServer.info.uri
+                };
+                internals.prepareServer(function (server) {
+
+                    var bait = new Bait(internals.defaults.job);
+                    var jobId = bait.getJobByName('prs').id;
+                    var number = 1;
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number }, function (response) {
+
+                        expect(response.statusCode).to.equal(200);
+                        expect(response.result.commit).to.exist();
+                        expect(response.result.number).to.exist();
+                        done();
+                    });
+                });
+            });
+        });
+    });
+/*
+
+    it('GET /api/job/{jobId}/pr/{number}/start', function (done) {
+
+        var type = 'github';
+        var routes = [
+            {
+                method: 'get',
+                path: '/repos/org/repo/pulls/1',
+                file: 'index.json'
+            },
+            {
+                method: 'get',
+                path: '/rate_limit',
+                file: 'anonymous.json'
+            }
+        ];
+        Mock.prepareServer(type, routes, function (mockServer) {
+
+            mockServer.start(function () {
+
+                internals.defaults.job.github = {
+                    url: mockServer.info.uri
+                };
+                internals.prepareServer(function (server) {
+
+                    var bait = new Bait(internals.defaults.job);
+                    var jobId = bait.getJobByName('prs').id;
+                    var number = 1;
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/start' }, function (response) {
+
+                        console.log(response.result);
+                        expect(response.statusCode).to.equal(200);
+                        done();
+                    });
+                });
             });
         });
     });
@@ -218,6 +333,8 @@ describe('pr', function () {
             });
         });
     });
+
+*/
 
     it('DELETE /api/job/{jobId} prs', function (done) {
 
