@@ -175,7 +175,7 @@ describe('user', function () {
         });
     });
 
-    it('POST /api/user/{id}', function (done) {
+    it('PUT /api/user/{id}', function (done) {
 
         internals.prepareServer(function (server) {
 
@@ -184,7 +184,7 @@ describe('user', function () {
                 expect(response.statusCode).to.equal(200);
                 var id = response.result[0].id;
                 var payload = { name: 'Lloyd Benson' };
-                server.inject({ method: 'POST', url: '/api/user/' + id, payload: payload }, function (response) {
+                server.inject({ method: 'PUT', url: '/api/user/' + id, payload: payload }, function (response) {
 
                     //console.log(response.result);
                     expect(response.statusCode).to.equal(200);
@@ -238,5 +238,4 @@ describe('user', function () {
             });
         });
     });
-
 });

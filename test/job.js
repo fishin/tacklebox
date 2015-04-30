@@ -212,7 +212,7 @@ describe('job', function () {
         });
     });
 
-    it('POST /api/job/{jobId} badcommand', function (done) {
+    it('PUT /api/job/{jobId} badcommand', function (done) {
 
         internals.prepareServer(function (server) {
 
@@ -222,7 +222,7 @@ describe('job', function () {
                 name: 'badcommand',
                 body: [ 'uptim' ]
             };
-            server.inject({ method: 'POST', url: '/api/job/' + jobId, payload: payload }, function (response) {
+            server.inject({ method: 'PUT', url: '/api/job/' + jobId, payload: payload }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.updateTime).to.exist();

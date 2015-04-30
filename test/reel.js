@@ -126,7 +126,7 @@ describe('reel', function () {
         });
     });
 
-    it('POST /api/reel/{id}', function (done) {
+    it('PUT /api/reel/{id}', function (done) {
 
         internals.prepareServer(function (server) {
 
@@ -136,7 +136,7 @@ describe('reel', function () {
                 expect(response.result).to.have.length(2);
                 var id = response.result[0].id;
                 var payload = { size: 5 };
-                server.inject({ method: 'POST', url: '/api/reel/' + id, payload: payload}, function (response) {
+                server.inject({ method: 'PUT', url: '/api/reel/' + id, payload: payload}, function (response) {
 
                     //console.log(response.result);
                     expect(response.statusCode).to.equal(200);
