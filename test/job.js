@@ -36,6 +36,19 @@ internals.prepareServer = function (callback) {
 
 describe('job', function () {
 
+    it('POST /api/jobs/active', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            server.inject({ method: 'GET', url: '/api/jobs/active' }, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                expect(response.result.length).to.equal(0);
+                done();
+            });
+        });
+    });
+
     it('POST /api/job parallelcommand', function (done) {
 
         internals.prepareServer(function (server) {

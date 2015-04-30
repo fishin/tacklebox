@@ -38,6 +38,19 @@ internals.prepareServer = function (callback) {
 
 describe('pr', function () {
 
+    it('POST /api/prs/active', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            server.inject({ method: 'GET', url: '/api/prs/active' }, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                expect(response.result.length).to.equal(0);
+                done();
+            });
+        });
+    });
+
     it('POST /api/job prs', function (done) {
 
         internals.prepareServer(function (server) {
