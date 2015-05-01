@@ -43,7 +43,7 @@ describe('job', function () {
             server.inject({ method: 'GET', url: '/api/jobs/active' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                expect(response.result.length).to.equal(0);
+                expect(response.result).to.be.empty();
                 done();
             });
         });
