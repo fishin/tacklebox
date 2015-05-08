@@ -146,9 +146,6 @@ describe('job', function () {
         });
     });
 
-// want to try to abort this
-// maybe background a process that runs every 1s and tries to kill the specific command by the same user?
-// generate bash script with sleep with specific name
     it('GET /api/job/{jobId}/start sleep5', function (done) {
 
         internals.prepareServer(function (server) {
@@ -518,6 +515,24 @@ describe('job', function () {
             });
         });
     });
+
+    it('GET /api/job/{jobId}/run/{runId}/previous noscm', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('noscm').id;
+            var runId1 = bait.getRuns(jobId)[1].id;
+            var runId2 = bait.getRuns(jobId)[0].id;
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId2 + '/previous' }, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                expect(response.result.id).to.equal(runId1);
+                done();
+            });
+        });
+    });
+
 
     it('GET /api/job/{jobId}/run/{runId} git', function (done) {
 
