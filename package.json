@@ -2,7 +2,7 @@
   "name": "tacklebox",
   "version": "1.1.1",
   "description": "restful api for ficion",
-  "main": "index.js",
+  "main": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/fishin/tacklebox"
