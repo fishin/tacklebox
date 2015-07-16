@@ -54,7 +54,7 @@ describe('user', function () {
 
         internals.prepareServer(function (server) {
 
-            server.inject({ method: 'GET', url: '/api/password/10'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/password/10' }, function (response) {
 
                 //console.log(response.result);
                 expect(response.statusCode).to.equal(200);
@@ -110,7 +110,7 @@ describe('user', function () {
 
         internals.prepareServer(function (server) {
 
-            server.inject({ method: 'GET', url: '/api/users'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/users' }, function (response) {
 
                 //console.log(response);
                 expect(response.statusCode).to.equal(200);
@@ -124,16 +124,16 @@ describe('user', function () {
 
         internals.prepareServer(function (server) {
 
-            server.inject({ method: 'GET', url: '/api/users'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/users' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 var id = response.result[0].id;
-                server.inject({ method: 'GET', url: '/api/user/' + id}, function (response) {
+                server.inject({ method: 'GET', url: '/api/user/' + id }, function (response2) {
 
-                    //console.log(response.result);
-                    expect(response.result.id).to.exist();
-                    expect(response.result.displayName).to.equal('Lloyd Benson1');
-                    expect(response.statusCode).to.equal(200);
+                    //console.log(response2.result);
+                    expect(response2.result.id).to.exist();
+                    expect(response2.result.displayName).to.equal('Lloyd Benson1');
+                    expect(response2.statusCode).to.equal(200);
                     done();
                 });
             });
@@ -164,11 +164,11 @@ describe('user', function () {
 
                 var userId = response.result.id;
                 var payload = { password: 'password' };
-                server.inject({ method: 'POST', url: '/api/user/' + userId + '/validate', payload: payload }, function (response) {
+                server.inject({ method: 'POST', url: '/api/user/' + userId + '/validate', payload: payload }, function (response2) {
 
-                    //console.log(response);
-                    expect(response.statusCode).to.equal(200);
-                    expect(response.result).to.be.true();
+                    //console.log(response2);
+                    expect(response2.statusCode).to.equal(200);
+                    expect(response2.result).to.be.true();
                     done();
                 });
             });
@@ -184,11 +184,11 @@ describe('user', function () {
                 expect(response.statusCode).to.equal(200);
                 var id = response.result[0].id;
                 var payload = { name: 'Lloyd Benson' };
-                server.inject({ method: 'PUT', url: '/api/user/' + id, payload: payload }, function (response) {
+                server.inject({ method: 'PUT', url: '/api/user/' + id, payload: payload }, function (response2) {
 
-                    //console.log(response.result);
-                    expect(response.statusCode).to.equal(200);
-                    expect(response.result.name).to.equal('Lloyd Benson');
+                    //console.log(response2.result);
+                    expect(response2.statusCode).to.equal(200);
+                    expect(response2.result.name).to.equal('Lloyd Benson');
                     done();
                 });
             });
@@ -199,17 +199,17 @@ describe('user', function () {
 
         internals.prepareServer(function (server) {
 
-            server.inject({ method: 'GET', url: '/api/users'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/users' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result).to.have.length(2);
                 var id = response.result[0].id;
-                server.inject({ method: 'DELETE', url: '/api/user/' + id }, function (response) {
+                server.inject({ method: 'DELETE', url: '/api/user/' + id }, function (response2) {
 
-                    expect(response.statusCode).to.equal(200);
-                    server.inject({ method: 'GET', url: '/api/users' }, function (response) {
+                    expect(response2.statusCode).to.equal(200);
+                    server.inject({ method: 'GET', url: '/api/users' }, function (response3) {
 
-                        expect(response.result).to.have.length(1);
+                        expect(response3.result).to.have.length(1);
                         done();
                     });
                 });
@@ -221,17 +221,17 @@ describe('user', function () {
 
         internals.prepareServer(function (server) {
 
-            server.inject({ method: 'GET', url: '/api/users'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/users' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result).to.have.length(1);
                 var id = response.result[0].id;
-                server.inject({ method: 'DELETE', url: '/api/user/' + id}, function (response) {
+                server.inject({ method: 'DELETE', url: '/api/user/' + id }, function (response2) {
 
-                    expect(response.statusCode).to.equal(200);
-                    server.inject({ method: 'GET', url: '/api/users'}, function (response) {
+                    expect(response2.statusCode).to.equal(200);
+                    server.inject({ method: 'GET', url: '/api/users' }, function (response3) {
 
-                        expect(response.result).to.have.length(0);
+                        expect(response3.result).to.have.length(0);
                         done();
                     });
                 });

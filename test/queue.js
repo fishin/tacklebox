@@ -52,11 +52,11 @@ describe('queue', function () {
             server.inject({ method: 'POST', url: '/api/queue', payload: payload }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                server.inject({ method: 'GET', url: '/api/queue' }, function (response) {
+                server.inject({ method: 'GET', url: '/api/queue' }, function (response2) {
 
-                    expect(response.statusCode).to.equal(200);
-                    expect(response.result.length).to.equal(1);
-                    expect(response.result[0].jobId).to.equal(jobId);
+                    expect(response2.statusCode).to.equal(200);
+                    expect(response2.result.length).to.equal(1);
+                    expect(response2.result[0].jobId).to.equal(jobId);
                     done();
                 });
             });
@@ -71,10 +71,10 @@ describe('queue', function () {
             server.inject({ method: 'DELETE', url: '/api/queue/' + jobId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
-                server.inject({ method: 'GET', url: '/api/queue' }, function (response) {
+                server.inject({ method: 'GET', url: '/api/queue' }, function (response2) {
 
-                    expect(response.statusCode).to.equal(200);
-                    expect(response.result.length).to.equal(0);
+                    expect(response2.statusCode).to.equal(200);
+                    expect(response2.result.length).to.equal(0);
                     done();
                 });
             });

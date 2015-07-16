@@ -55,7 +55,7 @@ describe('job', function () {
 
             var payload = {
                 name: 'parallelcommand',
-                body: [ 'sleep 5', 'sleep 2' ]
+                body: ['sleep 5', 'sleep 2']
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -73,22 +73,22 @@ describe('job', function () {
 
             var bait = new Bait(internals.defaults.job);
             var jobId = bait.getJobByName('parallelcommand').id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/start'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/start' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 var runId = response.result;
-                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId + '/pids' }, function (pidsResponse) {
+                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId + '/pids' }, function (response2) {
 
-                    expect(pidsResponse).to.exist();
+                    expect(response2).to.exist();
                 });
                 var intervalObj = setInterval(function () {
 
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (newResponse) {
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (response3) {
 
-                        if (newResponse.result.finishTime) {
+                        if (response3.result.finishTime) {
                             clearInterval(intervalObj);
-                            expect(newResponse.result.id).to.exist();
-                            expect(newResponse.result.finishTime).to.exist();
+                            expect(response3.result.id).to.exist();
+                            expect(response3.result.finishTime).to.exist();
                             //expect(lastSuccessId).to.not.exist();
                             done();
                         }
@@ -102,7 +102,7 @@ describe('job', function () {
 
         internals.prepareServer(function (server) {
 
-            server.inject({ method: 'GET', url: '/api/job/byname/parallelcommand'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/job/byname/parallelcommand' }, function (response) {
 
                 //console.log(response);
                 expect(response.statusCode).to.equal(200);
@@ -134,7 +134,7 @@ describe('job', function () {
 
             var payload = {
                 name: 'sleep5',
-                body: [ 'sleep 5' ]
+                body: ['sleep 5']
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -152,19 +152,19 @@ describe('job', function () {
 
             var bait = new Bait(internals.defaults.job);
             var jobId = bait.getJobByName('sleep5').id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/start'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/start' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 var runId = response.result;
                 var intervalObj = setInterval(function () {
 
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (newResponse) {
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (response2) {
 
-                        if (newResponse.result.finishTime) {
+                        if (response2.result.finishTime) {
                             clearInterval(intervalObj);
                             //var lastSuccessId = Store.getRunByLabel(jobId, 'lastSuccess');
-                            expect(newResponse.result.id).to.exist();
-                            expect(newResponse.result.finishTime).to.exist();
+                            expect(response2.result.id).to.exist();
+                            expect(response2.result.finishTime).to.exist();
                             done();
                         }
                     });
@@ -210,7 +210,7 @@ describe('job', function () {
 
             var payload = {
                 name: 'badcommand',
-                body: [ 'uptime' ]
+                body: ['uptime']
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -230,14 +230,14 @@ describe('job', function () {
             var jobId = bait.getJobByName('badcommand').id;
             var payload = {
                 name: 'badcommand',
-                body: [ 'uptim' ]
+                body: ['uptim']
             };
             server.inject({ method: 'PUT', url: '/api/job/' + jobId, payload: payload }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.updateTime).to.exist();
                 expect(response.result.name).to.equal('badcommand');
-                expect(response.result.body).to.only.include([ 'uptim' ]);
+                expect(response.result.body).to.only.include(['uptim']);
                 done();
             });
         });
@@ -249,20 +249,20 @@ describe('job', function () {
 
             var bait = new Bait(internals.defaults.job);
             var jobId = bait.getJobByName('badcommand').id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/start'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/start' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 var runId = response.result;
                 var intervalObj = setInterval(function () {
 
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (newResponse) {
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (response2) {
 
-                        if (newResponse.result.finishTime) {
+                        if (response2.result.finishTime) {
                             clearInterval(intervalObj);
                             //var lastSuccessId = Store.getRunByLabel(jobId, 'lastSuccess');
                             //var lastFailId = Store.getRunByLabel(jobId, 'lastFail');
-                            expect(newResponse.result.id).to.exist();
-                            expect(newResponse.result.finishTime).to.exist();
+                            expect(response2.result.id).to.exist();
+                            expect(response2.result.finishTime).to.exist();
                             //expect(lastFailId).to.exist();
                             //expect(lastSuccessId).to.not.exist();
                             done();
@@ -312,12 +312,12 @@ describe('job', function () {
 
             var payload = {
                 name: 'invalidscm',
-                head: [ 'date' ],
+                head: ['date'],
                 scm: {
                     type: 'invalid'
                 },
-                body: [ 'uptime' ],
-                tail: [ 'cat /etc/hosts' ]
+                body: ['uptime'],
+                tail: ['cat /etc/hosts']
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -335,9 +335,9 @@ describe('job', function () {
 
             var payload = {
                 name: 'noscm',
-                head: [ 'date' ],
-                body: [ 'uptime' ],
-                tail: [ 'cat /etc/hosts' ]
+                head: ['date'],
+                body: ['uptime'],
+                tail: ['cat /etc/hosts']
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -355,14 +355,14 @@ describe('job', function () {
 
             var payload = {
                 name: 'git',
-                head: [ 'date' ],
+                head: ['date'],
                 scm: {
                     type: 'git',
                     url: 'https://github.com/fishin/tacklebox',
                     branch: 'master'
                 },
-                body: [ 'bin/body.sh' ],
-                tail: [ 'bin/tail.sh' ]
+                body: ['bin/body.sh'],
+                tail: ['bin/tail.sh']
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -379,7 +379,7 @@ describe('job', function () {
 
         internals.prepareServer(function (server) {
 
-            server.inject({ method: 'GET', url: '/api/jobs'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/jobs' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result).to.have.length(2);
@@ -409,19 +409,19 @@ describe('job', function () {
 
             var bait = new Bait(internals.defaults.job);
             var jobId = bait.getJobByName('git').id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/start'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/start' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 var runId = response.result;
                 var intervalObj = setInterval(function () {
 
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (newResponse) {
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (response2) {
 
-                        if (newResponse.result.finishTime) {
+                        if (response2.result.finishTime) {
                             clearInterval(intervalObj);
                             //console.log(JSON.stringify(run, null, 4));
-                            expect(newResponse.result.id).to.exist();
-                            expect(newResponse.result.finishTime).to.exist();
+                            expect(response2.result.id).to.exist();
+                            expect(response2.result.finishTime).to.exist();
                             done();
                         }
                     });
@@ -448,19 +448,19 @@ describe('job', function () {
 
             var bait = new Bait(internals.defaults.job);
             var jobId = bait.getJobByName('noscm').id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/start'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/start' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 var runId = response.result;
                 var intervalObj = setInterval(function () {
 
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (newResponse) {
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (response2) {
 
-                        if (newResponse.result.finishTime) {
+                        if (response2.result.finishTime) {
                             clearInterval(intervalObj);
                             //console.log(JSON.stringify(run, null, 4));
-                            expect(newResponse.result.id).to.exist();
-                            expect(newResponse.result.finishTime).to.exist();
+                            expect(response2.result.id).to.exist();
+                            expect(response2.result.finishTime).to.exist();
                             done();
                         }
                     });
@@ -475,23 +475,18 @@ describe('job', function () {
 
             var bait = new Bait(internals.defaults.job);
             var jobId = bait.getJobByName('noscm').id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/start'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/start' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 var runId = response.result;
                 var intervalObj = setInterval(function () {
 
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (newResponse) {
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (response2) {
 
-                        if (newResponse.result.finishTime) {
+                        if (response2.result.finishTime) {
                             clearInterval(intervalObj);
-                            //console.log(JSON.stringify(run, null, 4));
-                            //var lastId = Store.getRunByLabel(jobId, 'last');
-                            //var lastSuccessId = Store.getRunByLabel(jobId, 'lastSuccess');
-                            expect(newResponse.result.id).to.exist();
-                            expect(newResponse.result.finishTime).to.exist();
-                            //expect(response.result.runId.toString()).to.equal(lastId);
-                            //expect(response.result.runId.toString()).to.equal(lastSuccessId);
+                            expect(response2.result.id).to.exist();
+                            expect(response2.result.finishTime).to.exist();
                             done();
                         }
                     });
@@ -506,7 +501,7 @@ describe('job', function () {
 
             var bait = new Bait(internals.defaults.job);
             var jobId = bait.getJobByName('noscm').id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/runs'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/runs' }, function (response) {
 
                 //console.log(response.result);
                 expect(response.statusCode).to.equal(200);
@@ -598,7 +593,7 @@ describe('job', function () {
             var jobId = bait.getJobByName('git').id;
             var runId = bait.getRuns(jobId)[0].id;
             var lastRun = bait.getRunByName(jobId, 'last');
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/byname/last'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/byname/last' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.status).to.equal('succeeded');
@@ -662,7 +657,7 @@ describe('job', function () {
 
             var payload = {
                 name: 'cancel',
-                body: [ 'sleep 5', 'sleep 2' ]
+                body: ['sleep 5', 'sleep 2']
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -680,28 +675,26 @@ describe('job', function () {
 
             var bait = new Bait(internals.defaults.job);
             var jobId = bait.getJobByName('cancel').id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/start'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/start' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 var runId = response.result;
-                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId + '/cancel' }, function (cancelResponse) {
+                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId + '/cancel' }, function (response2) {
 
-                    expect(cancelResponse).to.exist();
+                    expect(response2).to.exist();
                 });
                 var intervalObj = setInterval(function () {
 
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (newResponse) {
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (response3) {
 
-                        if (newResponse.result.finishTime) {
+                        if (response3.result.finishTime) {
                             clearInterval(intervalObj);
-                            //var lastSuccessId = Store.getRunByLabel(jobId, 'lastSuccess');
-                            expect(newResponse.result.id).to.exist();
-                            expect(newResponse.result.finishTime).to.exist();
-                            expect(newResponse.result.commands).to.be.length(2);
-                            expect(newResponse.result.commands[0].startTime).to.exist();
-                            expect(newResponse.result.commands[1].startTime).to.not.exist();
-                            expect(newResponse.result.status).to.equal('cancelled');
-                            //expect(lastSuccessId).to.not.exist();
+                            expect(response3.result.id).to.exist();
+                            expect(response3.result.finishTime).to.exist();
+                            expect(response3.result.commands).to.be.length(2);
+                            expect(response3.result.commands[0].startTime).to.exist();
+                            expect(response3.result.commands[1].startTime).to.not.exist();
+                            expect(response3.result.status).to.equal('cancelled');
                             done();
                         }
                     });

@@ -49,7 +49,7 @@ describe('pr mock', function () {
                     url: 'https://github.com/org/repo',
                     branch: 'master'
                 },
-                body: [ 'npm install', 'npm test' ]
+                body: ['npm install', 'npm test']
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -279,11 +279,11 @@ describe('pr mock', function () {
                     expect(response.result.length).to.equal(1);
                     //console.log(response.result);
                     var runId = response.result[0].id;
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/pids' }, function (newResponse) {
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/pids' }, function (response2) {
 
-                        //console.log(newResponse);
-                        expect(newResponse.result.length).to.equal(1);
-                        expect(newResponse.result[0]).to.be.a.number();
+                        //console.log(response2);
+                        expect(response2.result.length).to.equal(1);
+                        expect(response2.result[0]).to.be.a.number();
                         done();
                     });
                 });
@@ -309,11 +309,11 @@ describe('pr mock', function () {
                     expect(response.result.length).to.equal(1);
                     //console.log(response.result);
                     var runId = response.result[0].id;
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/cancel' }, function (newResponse) {
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/cancel' }, function (response2) {
 
-                        //console.log(newResponse);
-                        //expect(newResponse.result.length).to.equal(1);
-                        //expect(newResponse.result[0]).to.be.a.number();
+                        //console.log(response2);
+                        //expect(response2.result.length).to.equal(1);
+                        //expect(response2.result[0]).to.be.a.number();
                         done();
                     });
                 });
@@ -338,13 +338,13 @@ describe('pr mock', function () {
                     var runId = response.result[0].id;
                     var intervalObj = setInterval(function () {
 
-                        server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId }, function (newResponse) {
+                        server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId }, function (response2) {
 
-                            if (newResponse.result.finishTime) {
+                            if (response2.result.finishTime) {
                                 clearInterval(intervalObj);
-                                expect(newResponse.result.id).to.exist();
-                                expect(newResponse.result.status).to.equal('cancelled');
-                                expect(newResponse.result.finishTime).to.exist();
+                                expect(response2.result.id).to.exist();
+                                expect(response2.result.status).to.equal('cancelled');
+                                expect(response2.result.finishTime).to.exist();
                                 done();
                             }
                         });

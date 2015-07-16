@@ -62,7 +62,7 @@ describe('pr', function () {
                     url: 'https://github.com/fishin/demo',
                     branch: 'master'
                 },
-                body: [ 'npm install', 'npm test' ]
+                body: ['npm install', 'npm test']
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -87,10 +87,10 @@ describe('pr', function () {
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.length).to.be.above(0);
                 var number = response.result[0].number;
-                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/start' }, function (response) {
+                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/start' }, function (response2) {
 
-                    //console.log(response.result);
-                    expect(response.statusCode).to.equal(200);
+                    //console.log(response2.result);
+                    expect(response2.statusCode).to.equal(200);
                     done();
                 });
             });
@@ -109,9 +109,9 @@ describe('pr', function () {
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.length).to.be.above(0);
                 var number = response.result[0].number;
-                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response) {
+                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response2) {
 
-                    expect(response.result.length).to.equal(1);
+                    expect(response2.result.length).to.equal(1);
                     done();
                 });
             });
@@ -130,17 +130,17 @@ describe('pr', function () {
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.length).to.be.above(0);
                 var number = response.result[0].number;
-                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response) {
+                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response2) {
 
-                    expect(response.statusCode).to.equal(200);
-                    expect(response.result.length).to.equal(1);
-                    //console.log(response.result);
-                    var runId = response.result[0].id;
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/pids' }, function (newResponse) {
+                    expect(response2.statusCode).to.equal(200);
+                    expect(response2.result.length).to.equal(1);
+                    //console.log(response2.result);
+                    var runId = response2.result[0].id;
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/pids' }, function (response3) {
 
-                        //console.log(newResponse);
-                        expect(newResponse.result.length).to.equal(1);
-                        expect(newResponse.result[0]).to.be.a.number();
+                        //console.log(response3);
+                        expect(response3.result.length).to.equal(1);
+                        expect(response3.result[0]).to.be.a.number();
                         done();
                     });
                 });
@@ -160,17 +160,17 @@ describe('pr', function () {
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.length).to.be.above(0);
                 var number = response.result[0].number;
-                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response) {
+                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response2) {
 
-                    expect(response.statusCode).to.equal(200);
-                    expect(response.result.length).to.equal(1);
-                    //console.log(response.result);
-                    var runId = response.result[0].id;
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/cancel' }, function (newResponse) {
+                    expect(response2.statusCode).to.equal(200);
+                    expect(response2.result.length).to.equal(1);
+                    //console.log(response2.result);
+                    var runId = response2.result[0].id;
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/cancel' }, function (response3) {
 
-                        //console.log(newResponse);
-                        //expect(newResponse.result.length).to.equal(1);
-                        //expect(newResponse.result[0]).to.be.a.number();
+                        //console.log(response3);
+                        //expect(response3.result.length).to.equal(1);
+                        //expect(response3.result[0]).to.be.a.number();
                         done();
                     });
                 });
@@ -190,18 +190,18 @@ describe('pr', function () {
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.length).to.be.above(0);
                 var number = response.result[0].number;
-                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response) {
+                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response2) {
 
-                    var runId = response.result[0].id;
+                    var runId = response2.result[0].id;
                     var intervalObj = setInterval(function () {
 
-                        server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId }, function (newResponse) {
+                        server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId }, function (response3) {
 
-                            if (newResponse.result.finishTime) {
+                            if (response3.result.finishTime) {
                                 clearInterval(intervalObj);
-                                expect(newResponse.result.id).to.exist();
-                                expect(newResponse.result.status).to.equal('cancelled');
-                                expect(newResponse.result.finishTime).to.exist();
+                                expect(response3.result.id).to.exist();
+                                expect(response3.result.status).to.equal('cancelled');
+                                expect(response3.result.finishTime).to.exist();
                                 done();
                             }
                         });
@@ -223,12 +223,12 @@ describe('pr', function () {
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.length).to.be.above(0);
                 var number = response.result[0].number;
-                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response) {
+                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response2) {
 
-                    var runId = response.result[0].id;
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/previous' }, function (newResponse) {
+                    var runId = response2.result[0].id;
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/previous' }, function (response3) {
 
-                        expect(newResponse.result).to.not.exist();
+                        expect(response3.result).to.not.exist();
                         done();
                     });
                 });
@@ -248,9 +248,9 @@ describe('pr', function () {
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.length).to.be.above(0);
                 var number = response.result[0].number;
-                server.inject({ method: 'DELETE', url: '/api/job/' + jobId + '/pr/' + number }, function (response) {
+                server.inject({ method: 'DELETE', url: '/api/job/' + jobId + '/pr/' + number }, function (response2) {
 
-                    expect(response.statusCode).to.equal(200);
+                    expect(response2.statusCode).to.equal(200);
                     done();
                 });
             });

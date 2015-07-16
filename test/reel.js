@@ -81,7 +81,7 @@ describe('reel', function () {
 
         internals.prepareServer(function (server) {
 
-            server.inject({ method: 'GET', url: '/api/reel/byname/reel1'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/reel/byname/reel1' }, function (response) {
 
                 //console.log(response);
                 expect(response.statusCode).to.equal(200);
@@ -96,7 +96,7 @@ describe('reel', function () {
 
         internals.prepareServer(function (server) {
 
-            server.inject({ method: 'GET', url: '/api/reels'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/reels' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result).to.have.length(2);
@@ -109,17 +109,17 @@ describe('reel', function () {
 
         internals.prepareServer(function (server) {
 
-            server.inject({ method: 'GET', url: '/api/reels'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/reels' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result).to.have.length(2);
                 var id = response.result[0].id;
-                server.inject({ method: 'GET', url: '/api/reel/' + id}, function (response) {
+                server.inject({ method: 'GET', url: '/api/reel/' + id }, function (response2) {
 
-                    //console.log(response.result);
-                    expect(response.result.id).to.exist();
-                    expect(response.result.size).to.equal(4);
-                    expect(response.statusCode).to.equal(200);
+                    //console.log(response2.result);
+                    expect(response2.result.id).to.exist();
+                    expect(response2.result.size).to.equal(4);
+                    expect(response2.statusCode).to.equal(200);
                     done();
                 });
             });
@@ -130,17 +130,17 @@ describe('reel', function () {
 
         internals.prepareServer(function (server) {
 
-            server.inject({ method: 'GET', url: '/api/reels'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/reels' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result).to.have.length(2);
                 var id = response.result[0].id;
                 var payload = { size: 5 };
-                server.inject({ method: 'PUT', url: '/api/reel/' + id, payload: payload}, function (response) {
+                server.inject({ method: 'PUT', url: '/api/reel/' + id, payload: payload }, function (response2) {
 
-                    //console.log(response.result);
-                    expect(response.statusCode).to.equal(200);
-                    expect(response.result.size).to.equal(5);
+                    //console.log(response2.result);
+                    expect(response2.statusCode).to.equal(200);
+                    expect(response2.result.size).to.equal(5);
                     done();
                 });
             });
@@ -151,17 +151,17 @@ describe('reel', function () {
 
         internals.prepareServer(function (server) {
 
-            server.inject({ method: 'GET', url: '/api/reels'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/reels' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result).to.have.length(2);
                 var id = response.result[0].id;
-                server.inject({ method: 'DELETE', url: '/api/reel/' + id}, function (response) {
+                server.inject({ method: 'DELETE', url: '/api/reel/' + id }, function (response2) {
 
-                    expect(response.statusCode).to.equal(200);
-                    server.inject({ method: 'GET', url: '/api/reels'}, function (response) {
+                    expect(response2.statusCode).to.equal(200);
+                    server.inject({ method: 'GET', url: '/api/reels' }, function (response3) {
 
-                        expect(response.result).to.have.length(1);
+                        expect(response3.result).to.have.length(1);
                         done();
                     });
                 });
@@ -173,17 +173,17 @@ describe('reel', function () {
 
         internals.prepareServer(function (server) {
 
-            server.inject({ method: 'GET', url: '/api/reels'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/reels' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result).to.have.length(1);
                 var id = response.result[0].id;
-                server.inject({ method: 'DELETE', url: '/api/reel/' + id}, function (response) {
+                server.inject({ method: 'DELETE', url: '/api/reel/' + id }, function (response2) {
 
-                    expect(response.statusCode).to.equal(200);
-                    server.inject({ method: 'GET', url: '/api/reels'}, function (response) {
+                    expect(response2.statusCode).to.equal(200);
+                    server.inject({ method: 'GET', url: '/api/reels' }, function (response3) {
 
-                        expect(response.result).to.have.length(0);
+                        expect(response3.result).to.have.length(0);
                         done();
                     });
                 });

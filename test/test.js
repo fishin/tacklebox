@@ -50,7 +50,7 @@ describe('test', function () {
                     url: 'https://github.com/fishin/pail',
                     branch: 'master'
                 },
-                body: [ 'npm install', 'npm run-script json' ]
+                body: ['npm install', 'npm run-script json']
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
@@ -69,19 +69,19 @@ describe('test', function () {
 
             var bait = new Bait(internals.defaults.job);
             var jobId = bait.getJobByName('test').id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/start'}, function (response) {
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/start' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
                 var runId = response.result;
                 var intervalObj = setInterval(function () {
 
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (newResponse) {
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (response2) {
 
-                        if (newResponse.result.finishTime) {
+                        if (response2.result.finishTime) {
                             clearInterval(intervalObj);
                             //console.log(JSON.stringify(run, null, 4));
-                            expect(newResponse.result.id).to.exist();
-                            expect(newResponse.result.finishTime).to.exist();
+                            expect(response2.result.id).to.exist();
+                            expect(response2.result.finishTime).to.exist();
                             done();
                         }
                     });
