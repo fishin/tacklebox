@@ -50,7 +50,7 @@ describe('test', function () {
                     url: 'https://github.com/fishin/pail',
                     branch: 'master'
                 },
-                body: ['npm install', 'npm run-script json']
+                body: ['npm install', 'npm test']
             };
             server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
 
