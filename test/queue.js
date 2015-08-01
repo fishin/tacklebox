@@ -1,3 +1,4 @@
+var Bait = require('bait');
 var Code = require('code');
 var Hapi = require('hapi');
 var Lab = require('lab');
@@ -8,7 +9,16 @@ var expect = Code.expect;
 var describe = lab.describe;
 var it = lab.it;
 
-var internals = {};
+var internals = {
+    defaults: {
+        job: {
+            dirPath: __dirname + '/tmp/job',
+            workspace: 'workspace',
+            configFile: 'config.json'
+        }
+    }
+};
+
 
 internals.prepareServer = function (callback) {
 
@@ -27,11 +37,28 @@ internals.prepareServer = function (callback) {
 
 describe('queue', function () {
 
+    it('POST /api/job queue', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var payload = {
+                name: 'queue',
+                body: ['date']
+            };
+            server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                expect(response.payload).to.exist();
+                expect(response.result.id).to.exist();
+                done();
+            });
+        });
+    });
+
     it('GET /api/queue', function (done) {
 
         internals.prepareServer(function (server) {
 
-            var jobId = '12345678-1234-1234-1234-123456789012';
             server.inject({ method: 'GET', url: '/api/queue' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -45,7 +72,8 @@ describe('queue', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = '12345678-1234-1234-1234-123456789012';
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('queue').id;
             var payload = {
                 jobId: jobId
             };
@@ -67,7 +95,8 @@ describe('queue', function () {
 
         internals.prepareServer(function (server) {
 
-            var jobId = '12345678-1234-1234-1234-123456789012';
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('queue').id;
             server.inject({ method: 'DELETE', url: '/api/queue/' + jobId }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -80,4 +109,20 @@ describe('queue', function () {
             });
         });
     });
+
+    it('DELETE /api/job/{jobId} queue', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('queue').id;
+            server.inject({ method: 'DELETE', url: '/api/job/' + jobId }, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                expect(response.payload).to.exist();
+                done();
+            });
+        });
+    });
+
 });
