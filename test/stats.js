@@ -95,6 +95,21 @@ describe('stats', function () {
         });
     });
 
+    it('GET /api/job/{jobId}/runs/stats/limit/{limit}', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('runsstats').id;
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/runs/stats/limit/1' }, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                expect(response.result.runs.length).to.equal(1);
+                done();
+            });
+        });
+    });
+
     it('DELETE /api/job/{jobId}', function (done) {
 
         internals.prepareServer(function (server) {
