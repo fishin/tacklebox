@@ -110,6 +110,22 @@ describe('stats', function () {
         });
     });
 
+    it('GET /api/job/{jobId}/run/{runId}/stats', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('runsstats').id;
+            var runId = bait.getRuns(jobId)[0].id;
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId + '/stats' }, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                expect(response.result.id).to.exist();
+                done();
+            });
+        });
+    });
+
     it('DELETE /api/job/{jobId}', function (done) {
 
         internals.prepareServer(function (server) {
