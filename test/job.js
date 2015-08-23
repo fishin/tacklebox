@@ -430,18 +430,6 @@ describe('job', function () {
         });
     });
 
-    it('getWorkspaceArtifact', function (done) {
-
-        internals.prepareServer(function (server) {
-
-            var bait = new Bait(internals.defaults.job);
-            var jobId = bait.getJobByName('git').id;
-            var contents = bait.getWorkspaceArtifact(jobId, 'bin/tail.sh');
-            expect(contents).to.contain('cat /etc/hosts');
-            done();
-        });
-    });
-
     it('GET /api/job/{jobId}/start noscm', function (done) {
 
         internals.prepareServer(function (server) {
