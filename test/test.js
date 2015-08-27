@@ -43,7 +43,7 @@ describe('test', function () {
             var payload = {
                 name: 'test',
                 archive: {
-                    pattern: 'lab.json'
+                    pattern: 'test.lab'
                 },
                 scm: {
                     type: 'git',
@@ -90,14 +90,14 @@ describe('test', function () {
         });
     });
 
-    it('GET /api/job/{jobId}/run/{runId}/test/lab.json', function (done) {
+    it('GET /api/job/{jobId}/run/{runId}/test/test.lab', function (done) {
 
         internals.prepareServer(function (server) {
 
             var bait = new Bait(internals.defaults.job);
             var jobId = bait.getJobByName('test').id;
             var runId = bait.getRuns(jobId)[0].id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId + '/test/lab.json' }, function (response) {
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId + '/test/test.lab' }, function (response) {
 
                 //console.log(response.result);
                 expect(response.result.totalTests).to.exist();
@@ -118,7 +118,7 @@ describe('test', function () {
             var bait = new Bait(internals.defaults.job);
             var jobId = bait.getJobByName('test').id;
             var runId = bait.getRuns(jobId)[0].id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId + '/archive/lab.json' }, function (response) {
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId + '/archive/test.lab' }, function (response) {
 
                 //console.log(response.result);
                 expect(response.result).to.exist();
@@ -137,7 +137,7 @@ describe('test', function () {
             server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId + '/archive' }, function (response) {
 
                 //console.log(response.result);
-                expect(response.result[0]).to.equal('lab.json');
+                expect(response.result[0]).to.equal('test.lab');
                 done();
             });
         });
