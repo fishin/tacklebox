@@ -14,8 +14,8 @@
   },
   "scripts": {
     "clean": "rm -rf node_modules",
-    "console": "lab -a code -t 100 -v -m 30000 -L",
-    "test": "lab -a code -t 100 -v -m 30000 -L -r json -o test.lab -r html -o test.html -r console -o stdout -r console -o test.log"
+    "console": "lab -a code -t 100 -v -m 60000 -L",
+    "test": "lab -a code -t 100 -v -m 60000 -L -r json -o test.lab -r html -o test.html -r console -o stdout -r console -o test.log"
   },
   "dependencies": {
     "boom": "2.x.x",
