@@ -377,6 +377,45 @@ describe('pr mock', function () {
 
 */
 
+    it('DELETE /api/queue/{jobId}/pr/{number}', function (done) {
+
+        var type = 'github';
+        var routes = [
+            {
+                method: 'get',
+                path: '/repos/org/repo/pulls/1',
+                file: 'index.json'
+            },
+            {
+                method: 'get',
+                path: '/rate_limit',
+                file: 'anonymous.json'
+            }
+        ];
+        Mock.prepareServer(type, routes, function (mockServer) {
+
+            mockServer.start(function () {
+
+                internals.defaults.job.github = {
+                    url: mockServer.info.uri
+                };
+                internals.prepareServer(function (server) {
+
+                    var bait = new Bait(internals.defaults.job);
+                    var jobId = bait.getJobByName('prs').id;
+                    var number = 1;
+                    server.inject({ method: 'DELETE', url: '/api/queue/' + jobId + '/pr/' + number }, function (response) {
+
+                        //console.log(response.result);
+                        expect(response.statusCode).to.equal(200);
+                        done();
+                    });
+                });
+            });
+        });
+    });
+
+
     it('DELETE /api/job/{jobId} prs', function (done) {
 
         internals.prepareServer(function (server) {
