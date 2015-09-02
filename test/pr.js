@@ -193,19 +193,13 @@ describe('pr', function () {
                 server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response2) {
 
                     var runId = response2.result[0].id;
-                    var intervalObj = setInterval(function () {
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId }, function (response3) {
 
-                        server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId }, function (response3) {
-
-                            if (response3.result.finishTime) {
-                                clearInterval(intervalObj);
-                                expect(response3.result.id).to.exist();
-                                expect(response3.result.status).to.equal('cancelled');
-                                expect(response3.result.finishTime).to.exist();
-                                done();
-                            }
-                        });
-                    }, 1000);
+                        expect(response3.result.id).to.exist();
+                        expect(response3.result.status).to.equal('cancelled');
+                        expect(response3.result.finishTime).to.exist();
+                        done();
+                    });
                 });
             });
         });
