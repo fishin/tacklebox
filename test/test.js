@@ -73,13 +73,14 @@ describe('test', function () {
 
                 expect(response.statusCode).to.equal(200);
                 var runId = response.result;
+                console.log('runId:' + runId);
                 var intervalObj = setInterval(function () {
 
                     server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (response2) {
 
+                        console.log(response2.result); 
                         if (response2.result.finishTime) {
                             clearInterval(intervalObj);
-                            //console.log(JSON.stringify(run, null, 4));
                             expect(response2.result.id).to.exist();
                             expect(response2.result.finishTime).to.exist();
                             done();
