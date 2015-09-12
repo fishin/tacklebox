@@ -89,14 +89,14 @@ describe('test', function () {
         });
     });
 
-    it('GET /api/job/{jobId}/run/{runId}/test/test.lab', function (done) {
+    it('GET /api/job/{jobId}/run/{runId}/test', function (done) {
 
         internals.prepareServer(function (server) {
 
             var bait = new Bait(internals.defaults.job);
             var jobId = bait.getJobByName('test').id;
             var runId = bait.getRuns(jobId)[0].id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId + '/test/test.lab' }, function (response) {
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId + '/test' }, function (response) {
 
                 //console.log(response.result);
                 expect(response.result.totalTests).to.exist();
