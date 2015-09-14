@@ -126,6 +126,20 @@ describe('stats', function () {
         });
     });
 
+    it('GET /api/jobs/stats', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            server.inject({ method: 'GET', url: '/api/jobs/stats' }, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                //console.log(response.result);
+                expect(response.result).to.have.length(1);
+                done();
+            });
+        });
+    });
+
     it('DELETE /api/job/{jobId}', function (done) {
 
         internals.prepareServer(function (server) {
