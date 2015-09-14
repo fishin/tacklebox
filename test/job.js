@@ -691,6 +691,21 @@ describe('job', function () {
         });
     });
 
+    it('DELETE /api/job/{jobId}/runs cancel', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            var bait = new Bait(internals.defaults.job);
+            var jobId = bait.getJobByName('cancel').id;
+            server.inject({ method: 'DELETE', url: '/api/job/' + jobId + '/runs' }, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                expect(response.payload).to.exist();
+                done();
+            });
+        });
+    });
+
     it('DELETE /api/job/{jobId} cancel', function (done) {
 
         internals.prepareServer(function (server) {
