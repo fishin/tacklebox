@@ -21,6 +21,7 @@
     "boom": "2.x.x",
     "hapi": "10.x.x",
     "hoek": "2.x.x",
+    "inert": "3.x.x",
     "joi": "6.x.x",
     "node-uuid": "1.x.x",
     "angler": "git+https://github.com/fishin/angler.git",
@@ -28,7 +29,8 @@
     "fillet": "git+https://github.com/fishin/fillet.git",
     "fishhook": "git+https://github.com/fishin/fishhook.git",
     "pail": "git+https://github.com/fishin/pail.git",
-    "reel": "git+https://github.com/fishin/reel.git"
+    "reel": "git+https://github.com/fishin/reel.git",
+    "vision": "3.x.x"
   },
   "devDependencies": {
     "code": "1.x.x",
