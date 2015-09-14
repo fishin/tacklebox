@@ -125,4 +125,16 @@ describe('queue', function () {
         });
     });
 
+    it('DELETE /api/queue', function (done) {
+
+        internals.prepareServer(function (server) {
+
+            server.inject({ method: 'DELETE', url: '/api/queue' }, function (response) {
+
+                expect(response.statusCode).to.equal(200);
+                expect(response.payload).to.exist();
+                done();
+            });
+        });
+    });
 });
