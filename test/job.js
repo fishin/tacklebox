@@ -542,7 +542,6 @@ describe('job', function () {
 
             var bait = new Bait(internals.defaults.job);
             var jobId = bait.getJobByName('git').id;
-            var runId = bait.getRuns(jobId)[0].id;
             server.inject({ method: 'GET', url: '/api/job/' + jobId + '/commits' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);
@@ -580,7 +579,6 @@ describe('job', function () {
             var bait = new Bait(internals.defaults.job);
             var jobId = bait.getJobByName('git').id;
             var runId = bait.getRuns(jobId)[0].id;
-            var lastRun = bait.getRunByName(jobId, 'last');
             server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/byname/last' }, function (response) {
 
                 expect(response.statusCode).to.equal(200);

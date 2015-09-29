@@ -2,7 +2,6 @@ var Bait = require('bait');
 var Code = require('code');
 var Hapi = require('hapi');
 var Lab = require('lab');
-var Mock = require('mock');
 
 var lab = exports.lab = Lab.script();
 var expect = Code.expect;
