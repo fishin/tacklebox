@@ -1,14 +1,16 @@
-var Bait = require('bait');
-var Code = require('code');
-var Hapi = require('hapi');
-var Lab = require('lab');
+'use strict';
 
-var lab = exports.lab = Lab.script();
-var expect = Code.expect;
-var describe = lab.describe;
-var it = lab.it;
+const Bait = require('bait');
+const Code = require('code');
+const Hapi = require('hapi');
+const Lab = require('lab');
 
-var internals = {
+const lab = exports.lab = Lab.script();
+const expect = Code.expect;
+const describe = lab.describe;
+const it = lab.it;
+
+const internals = {
     defaults: {
         job: {
             dirPath: __dirname + '/tmp/job',
@@ -21,30 +23,30 @@ var internals = {
 
 internals.prepareServer = function (callback) {
 
-    var server = new Hapi.Server();
+    const server = new Hapi.Server();
     server.connection();
 
     server.register({
         register: require('..'),
         options: internals.defaults
-    }, function (err) {
+    }, (err) => {
 
         expect(err).to.not.exist();
         callback(server);
     });
 };
 
-describe('queue', function () {
+describe('queue', () => {
 
-    it('POST /api/job queue', function (done) {
+    it('POST /api/job queue', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            var payload = {
+            const payload = {
                 name: 'queue',
                 body: ['date']
             };
-            server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
+            server.inject({ method: 'POST', url: '/api/job', payload: payload }, (response) => {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist();
@@ -54,11 +56,11 @@ describe('queue', function () {
         });
     });
 
-    it('GET /api/queue', function (done) {
+    it('GET /api/queue', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            server.inject({ method: 'GET', url: '/api/queue' }, function (response) {
+            server.inject({ method: 'GET', url: '/api/queue' }, (response) => {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.length).to.equal(0);
@@ -67,19 +69,19 @@ describe('queue', function () {
         });
     });
 
-    it('POST /api/queue', function (done) {
+    it('POST /api/queue', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            var bait = new Bait(internals.defaults.job);
-            var jobId = bait.getJobByName('queue').id;
-            var payload = {
+            const bait = new Bait(internals.defaults.job);
+            const jobId = bait.getJobByName('queue').id;
+            const payload = {
                 jobId: jobId
             };
-            server.inject({ method: 'POST', url: '/api/queue', payload: payload }, function (response) {
+            server.inject({ method: 'POST', url: '/api/queue', payload: payload }, (response) => {
 
                 expect(response.statusCode).to.equal(200);
-                server.inject({ method: 'GET', url: '/api/queue' }, function (response2) {
+                server.inject({ method: 'GET', url: '/api/queue' }, (response2) => {
 
                     expect(response2.statusCode).to.equal(200);
                     expect(response2.result.length).to.equal(1);
@@ -90,16 +92,16 @@ describe('queue', function () {
         });
     });
 
-    it('DELETE /api/queue/{jobId}', function (done) {
+    it('DELETE /api/queue/{jobId}', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            var bait = new Bait(internals.defaults.job);
-            var jobId = bait.getJobByName('queue').id;
-            server.inject({ method: 'DELETE', url: '/api/queue/' + jobId }, function (response) {
+            const bait = new Bait(internals.defaults.job);
+            const jobId = bait.getJobByName('queue').id;
+            server.inject({ method: 'DELETE', url: '/api/queue/' + jobId }, (response) => {
 
                 expect(response.statusCode).to.equal(200);
-                server.inject({ method: 'GET', url: '/api/queue' }, function (response2) {
+                server.inject({ method: 'GET', url: '/api/queue' }, (response2) => {
 
                     expect(response2.statusCode).to.equal(200);
                     expect(response2.result.length).to.equal(0);
@@ -109,13 +111,13 @@ describe('queue', function () {
         });
     });
 
-    it('DELETE /api/job/{jobId} queue', function (done) {
+    it('DELETE /api/job/{jobId} queue', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            var bait = new Bait(internals.defaults.job);
-            var jobId = bait.getJobByName('queue').id;
-            server.inject({ method: 'DELETE', url: '/api/job/' + jobId }, function (response) {
+            const bait = new Bait(internals.defaults.job);
+            const jobId = bait.getJobByName('queue').id;
+            server.inject({ method: 'DELETE', url: '/api/job/' + jobId }, (response) => {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist();
@@ -124,11 +126,11 @@ describe('queue', function () {
         });
     });
 
-    it('DELETE /api/queue', function (done) {
+    it('DELETE /api/queue', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            server.inject({ method: 'DELETE', url: '/api/queue' }, function (response) {
+            server.inject({ method: 'DELETE', url: '/api/queue' }, (response) => {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist();

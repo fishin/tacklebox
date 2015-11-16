@@ -1,9 +1,11 @@
-var Bait = require('bait');
-var Code = require('code');
-var Lab = require('lab');
-var Hapi = require('hapi');
+'use strict';
 
-var internals = {
+const Bait = require('bait');
+const Code = require('code');
+const Lab = require('lab');
+const Hapi = require('hapi');
+
+const internals = {
     defaults: {
         job: {
             dirPath: __dirname + '/tmp/job',
@@ -13,38 +15,38 @@ var internals = {
     }
 };
 
-var lab = exports.lab = Lab.script();
-var expect = Code.expect;
-var describe = lab.describe;
-var it = lab.it;
+const lab = exports.lab = Lab.script();
+const expect = Code.expect;
+const describe = lab.describe;
+const it = lab.it;
 
 internals.prepareServer = function (callback) {
 
-    var server = new Hapi.Server();
+    const server = new Hapi.Server();
     server.connection();
 
     server.register({
 
         register: require('..'),
         options: internals.defaults
-    }, function (err) {
+    }, (err) => {
 
         expect(err).to.not.exist();
         callback(server);
     });
 };
 
-describe('stats', function () {
+describe('stats', () => {
 
-    it('POST /api/job', function (done) {
+    it('POST /api/job', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            var payload = {
+            const payload = {
                 name: 'runsstats',
                 body: ['uptime']
             };
-            server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
+            server.inject({ method: 'POST', url: '/api/job', payload: payload }, (response) => {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist();
@@ -54,19 +56,19 @@ describe('stats', function () {
         });
     });
 
-    it('GET /api/job/{jobId}/start', function (done) {
+    it('GET /api/job/{jobId}/start', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            var bait = new Bait(internals.defaults.job);
-            var jobId = bait.getJobByName('runsstats').id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/start' }, function (response) {
+            const bait = new Bait(internals.defaults.job);
+            const jobId = bait.getJobByName('runsstats').id;
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/start' }, (response) => {
 
                 expect(response.statusCode).to.equal(200);
-                var runId = response.result;
-                var intervalObj = setInterval(function () {
+                const runId = response.result;
+                const intervalObj = setInterval(() => {
 
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, function (response2) {
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId }, (response2) => {
 
                         if (response2.result.finishTime) {
                             clearInterval(intervalObj);
@@ -80,28 +82,13 @@ describe('stats', function () {
         });
     });
 
-    it('GET /api/job/{jobId}/runs/stats', function (done) {
+    it('GET /api/job/{jobId}/runs/stats', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            var bait = new Bait(internals.defaults.job);
-            var jobId = bait.getJobByName('runsstats').id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/runs/stats' }, function (response) {
-
-                expect(response.statusCode).to.equal(200);
-                expect(response.result.runs.length).to.equal(1);
-                done();
-            });
-        });
-    });
-
-    it('GET /api/job/{jobId}/runs/stats/limit/{limit}', function (done) {
-
-        internals.prepareServer(function (server) {
-
-            var bait = new Bait(internals.defaults.job);
-            var jobId = bait.getJobByName('runsstats').id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/runs/stats/limit/1' }, function (response) {
+            const bait = new Bait(internals.defaults.job);
+            const jobId = bait.getJobByName('runsstats').id;
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/runs/stats' }, (response) => {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.runs.length).to.equal(1);
@@ -110,14 +97,29 @@ describe('stats', function () {
         });
     });
 
-    it('GET /api/job/{jobId}/run/{runId}/stats', function (done) {
+    it('GET /api/job/{jobId}/runs/stats/limit/{limit}', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            var bait = new Bait(internals.defaults.job);
-            var jobId = bait.getJobByName('runsstats').id;
-            var runId = bait.getRuns(jobId)[0].id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId + '/stats' }, function (response) {
+            const bait = new Bait(internals.defaults.job);
+            const jobId = bait.getJobByName('runsstats').id;
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/runs/stats/limit/1' }, (response) => {
+
+                expect(response.statusCode).to.equal(200);
+                expect(response.result.runs.length).to.equal(1);
+                done();
+            });
+        });
+    });
+
+    it('GET /api/job/{jobId}/run/{runId}/stats', (done) => {
+
+        internals.prepareServer((server) => {
+
+            const bait = new Bait(internals.defaults.job);
+            const jobId = bait.getJobByName('runsstats').id;
+            const runId = bait.getRuns(jobId)[0].id;
+            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/run/' + runId + '/stats' }, (response) => {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result.id).to.exist();
@@ -126,11 +128,11 @@ describe('stats', function () {
         });
     });
 
-    it('GET /api/jobs/stats', function (done) {
+    it('GET /api/jobs/stats', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            server.inject({ method: 'GET', url: '/api/jobs/stats' }, function (response) {
+            server.inject({ method: 'GET', url: '/api/jobs/stats' }, (response) => {
 
                 expect(response.statusCode).to.equal(200);
                 //console.log(response.result);
@@ -140,13 +142,13 @@ describe('stats', function () {
         });
     });
 
-    it('DELETE /api/job/{jobId}', function (done) {
+    it('DELETE /api/job/{jobId}', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            var bait = new Bait(internals.defaults.job);
-            var jobId = bait.getJobByName('runsstats').id;
-            server.inject({ method: 'DELETE', url: '/api/job/' + jobId }, function (response) {
+            const bait = new Bait(internals.defaults.job);
+            const jobId = bait.getJobByName('runsstats').id;
+            server.inject({ method: 'DELETE', url: '/api/job/' + jobId }, (response) => {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist();

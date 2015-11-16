@@ -1,8 +1,10 @@
-var Code = require('code');
-var Lab = require('lab');
-var Hapi = require('hapi');
+'use strict';
 
-var internals = {
+const Code = require('code');
+const Lab = require('lab');
+const Hapi = require('hapi');
+
+const internals = {
     defaults: {
         job: {
             dirPath: __dirname + '/tmp/job'
@@ -13,40 +15,40 @@ var internals = {
     }
 };
 
-var lab = exports.lab = Lab.script();
-var expect = Code.expect;
-var describe = lab.describe;
-var it = lab.it;
+const lab = exports.lab = Lab.script();
+const expect = Code.expect;
+const describe = lab.describe;
+const it = lab.it;
 
 internals.prepareServer = function (callback) {
 
-    var server = new Hapi.Server();
+    const server = new Hapi.Server();
     server.connection();
 
     server.register({
 
         register: require('..'),
         options: internals.defaults
-    }, function (err) {
+    }, (err) => {
 
         expect(err).to.not.exist();
         callback(server);
     });
 };
 
-describe('reel', function () {
+describe('reel', () => {
 
-    it('POST /api/reel reel1', function (done) {
+    it('POST /api/reel reel1', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            var payload = {
+            const payload = {
                 name: 'reel1',
                 host: 'localhost',
                 port: 8081,
                 size: 4
             };
-            server.inject({ method: 'POST', url: '/api/reel', payload: payload }, function (response) {
+            server.inject({ method: 'POST', url: '/api/reel', payload: payload }, (response) => {
 
                 //console.log(response.result);
                 expect(response.statusCode).to.equal(200);
@@ -56,17 +58,17 @@ describe('reel', function () {
         });
     });
 
-    it('POST /api/reel reel2', function (done) {
+    it('POST /api/reel reel2', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            var payload = {
+            const payload = {
                 name: 'reel2',
                 host: 'localhost',
                 port: 8082,
                 size: 4
             };
-            server.inject({ method: 'POST', url: '/api/reel', payload: payload }, function (response) {
+            server.inject({ method: 'POST', url: '/api/reel', payload: payload }, (response) => {
 
                 //console.log(response.result);
                 expect(response.statusCode).to.equal(200);
@@ -77,11 +79,11 @@ describe('reel', function () {
     });
 
 
-    it('GET /api/reel/byname reel1', function (done) {
+    it('GET /api/reel/byname reel1', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            server.inject({ method: 'GET', url: '/api/reel/byname/reel1' }, function (response) {
+            server.inject({ method: 'GET', url: '/api/reel/byname/reel1' }, (response) => {
 
                 //console.log(response);
                 expect(response.statusCode).to.equal(200);
@@ -92,11 +94,11 @@ describe('reel', function () {
         });
     });
 
-    it('GET /api/reels', function (done) {
+    it('GET /api/reels', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            server.inject({ method: 'GET', url: '/api/reels' }, function (response) {
+            server.inject({ method: 'GET', url: '/api/reels' }, (response) => {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result).to.have.length(2);
@@ -105,16 +107,16 @@ describe('reel', function () {
         });
     });
 
-    it('GET /api/reel/{id}', function (done) {
+    it('GET /api/reel/{id}', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            server.inject({ method: 'GET', url: '/api/reels' }, function (response) {
+            server.inject({ method: 'GET', url: '/api/reels' }, (response) => {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result).to.have.length(2);
-                var id = response.result[0].id;
-                server.inject({ method: 'GET', url: '/api/reel/' + id }, function (response2) {
+                const id = response.result[0].id;
+                server.inject({ method: 'GET', url: '/api/reel/' + id }, (response2) => {
 
                     //console.log(response2.result);
                     expect(response2.result.id).to.exist();
@@ -126,17 +128,17 @@ describe('reel', function () {
         });
     });
 
-    it('PUT /api/reel/{id}', function (done) {
+    it('PUT /api/reel/{id}', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            server.inject({ method: 'GET', url: '/api/reels' }, function (response) {
+            server.inject({ method: 'GET', url: '/api/reels' }, (response) => {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result).to.have.length(2);
-                var id = response.result[0].id;
-                var payload = { size: 5 };
-                server.inject({ method: 'PUT', url: '/api/reel/' + id, payload: payload }, function (response2) {
+                const id = response.result[0].id;
+                const payload = { size: 5 };
+                server.inject({ method: 'PUT', url: '/api/reel/' + id, payload: payload }, (response2) => {
 
                     //console.log(response2.result);
                     expect(response2.statusCode).to.equal(200);
@@ -147,19 +149,19 @@ describe('reel', function () {
         });
     });
 
-    it('DELETE /api/reel/{id} reel1', function (done) {
+    it('DELETE /api/reel/{id} reel1', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            server.inject({ method: 'GET', url: '/api/reels' }, function (response) {
+            server.inject({ method: 'GET', url: '/api/reels' }, (response) => {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result).to.have.length(2);
-                var id = response.result[0].id;
-                server.inject({ method: 'DELETE', url: '/api/reel/' + id }, function (response2) {
+                const id = response.result[0].id;
+                server.inject({ method: 'DELETE', url: '/api/reel/' + id }, (response2) => {
 
                     expect(response2.statusCode).to.equal(200);
-                    server.inject({ method: 'GET', url: '/api/reels' }, function (response3) {
+                    server.inject({ method: 'GET', url: '/api/reels' }, (response3) => {
 
                         expect(response3.result).to.have.length(1);
                         done();
@@ -169,19 +171,19 @@ describe('reel', function () {
         });
     });
 
-    it('DELETE /api/reel/{id} reel2', function (done) {
+    it('DELETE /api/reel/{id} reel2', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            server.inject({ method: 'GET', url: '/api/reels' }, function (response) {
+            server.inject({ method: 'GET', url: '/api/reels' }, (response) => {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.result).to.have.length(1);
-                var id = response.result[0].id;
-                server.inject({ method: 'DELETE', url: '/api/reel/' + id }, function (response2) {
+                const id = response.result[0].id;
+                server.inject({ method: 'DELETE', url: '/api/reel/' + id }, (response2) => {
 
                     expect(response2.statusCode).to.equal(200);
-                    server.inject({ method: 'GET', url: '/api/reels' }, function (response3) {
+                    server.inject({ method: 'GET', url: '/api/reels' }, (response3) => {
 
                         expect(response3.result).to.have.length(0);
                         done();

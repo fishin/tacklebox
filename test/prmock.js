@@ -1,10 +1,12 @@
-var Bait = require('bait');
-var Code = require('code');
-var Hapi = require('hapi');
-var Lab = require('lab');
-var Mock = require('mock');
+'use strict';
 
-var internals = {
+const Bait = require('bait');
+const Code = require('code');
+const Hapi = require('hapi');
+const Lab = require('lab');
+const Mock = require('mock');
+
+const internals = {
     defaults: {
         job: {
             dirPath: __dirname + '/tmp/job',
@@ -15,34 +17,34 @@ var internals = {
     }
 };
 
-var lab = exports.lab = Lab.script();
-var expect = Code.expect;
-var describe = lab.describe;
-var it = lab.it;
+const lab = exports.lab = Lab.script();
+const expect = Code.expect;
+const describe = lab.describe;
+const it = lab.it;
 
 internals.prepareServer = function (callback) {
 
-    var server = new Hapi.Server();
+    const server = new Hapi.Server();
     server.connection();
 
     server.register({
 
         register: require('..'),
         options: internals.defaults
-    }, function (err) {
+    }, (err) => {
 
         expect(err).to.not.exist();
         callback(server);
     });
 };
 
-describe('pr mock', function () {
+describe('pr mock', () => {
 
-    it('POST /api/job prs', function (done) {
+    it('POST /api/job prs', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            var payload = {
+            const payload = {
                 name: 'prs',
                 scm: {
                     type: 'git',
@@ -51,7 +53,7 @@ describe('pr mock', function () {
                 },
                 body: ['npm install', 'npm test']
             };
-            server.inject({ method: 'POST', url: '/api/job', payload: payload }, function (response) {
+            server.inject({ method: 'POST', url: '/api/job', payload: payload }, (response) => {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist();
@@ -61,10 +63,10 @@ describe('pr mock', function () {
         });
     });
 
-    it('GET /api/job/{jobId}/prs', function (done) {
+    it('GET /api/job/{jobId}/prs', (done) => {
 
-        var type = 'github';
-        var routes = [
+        const type = 'github';
+        const routes = [
             {
                 method: 'get',
                 path: '/repos/org/repo/pulls',
@@ -76,18 +78,18 @@ describe('pr mock', function () {
                 file: 'anonymous.json'
             }
         ];
-        Mock.prepareServer(type, routes, function (mockServer) {
+        Mock.prepareServer(type, routes, (mockServer) => {
 
-            mockServer.start(function () {
+            mockServer.start(() => {
 
                 internals.defaults.job.github = {
                     url: mockServer.info.uri
                 };
-                var bait = new Bait(internals.defaults.job);
-                var jobId = bait.getJobByName('prs').id;
-                internals.prepareServer(function (server) {
+                const bait = new Bait(internals.defaults.job);
+                const jobId = bait.getJobByName('prs').id;
+                internals.prepareServer((server) => {
 
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/prs' }, function (response) {
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/prs' }, (response) => {
 
                         //console.log(response.result);
                         expect(response.statusCode).to.equal(200);
@@ -99,10 +101,10 @@ describe('pr mock', function () {
         });
     });
 
-    it('GET /api/job/{jobId}/pr/{number}', function (done) {
+    it('GET /api/job/{jobId}/pr/{number}', (done) => {
 
-        var type = 'github';
-        var routes = [
+        const type = 'github';
+        const routes = [
             {
                 method: 'get',
                 path: '/repos/org/repo/pulls/1',
@@ -114,19 +116,19 @@ describe('pr mock', function () {
                 file: 'anonymous.json'
             }
         ];
-        Mock.prepareServer(type, routes, function (mockServer) {
+        Mock.prepareServer(type, routes, (mockServer) => {
 
-            mockServer.start(function () {
+            mockServer.start(() => {
 
                 internals.defaults.job.github = {
                     url: mockServer.info.uri
                 };
-                internals.prepareServer(function (server) {
+                internals.prepareServer((server) => {
 
-                    var bait = new Bait(internals.defaults.job);
-                    var jobId = bait.getJobByName('prs').id;
-                    var number = 1;
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number }, function (response) {
+                    const bait = new Bait(internals.defaults.job);
+                    const jobId = bait.getJobByName('prs').id;
+                    const number = 1;
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number }, (response) => {
 
                         expect(response.statusCode).to.equal(200);
                         expect(response.result.commit).to.exist();
@@ -138,10 +140,10 @@ describe('pr mock', function () {
         });
     });
 
-    it('GET /api/job/{jobId}/pr/{number}/merge', function (done) {
+    it('GET /api/job/{jobId}/pr/{number}/merge', (done) => {
 
-        var type = 'github';
-        var routes = [
+        const type = 'github';
+        const routes = [
             {
                 method: 'put',
                 path: '/repos/org/repo/pulls/1/merge',
@@ -153,19 +155,19 @@ describe('pr mock', function () {
                 file: 'authorized.json'
             }
         ];
-        Mock.prepareServer(type, routes, function (mockServer) {
+        Mock.prepareServer(type, routes, (mockServer) => {
 
-            mockServer.start(function () {
+            mockServer.start(() => {
 
                 internals.defaults.job.github = {
                     url: mockServer.info.uri
                 };
-                internals.prepareServer(function (server) {
+                internals.prepareServer((server) => {
 
-                    var bait = new Bait(internals.defaults.job);
-                    var jobId = bait.getJobByName('prs').id;
-                    var number = 1;
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/merge' }, function (response) {
+                    const bait = new Bait(internals.defaults.job);
+                    const jobId = bait.getJobByName('prs').id;
+                    const number = 1;
+                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/merge' }, (response) => {
 
                         //console.log(response.result);
                         expect(response.statusCode).to.equal(200);
@@ -178,12 +180,11 @@ describe('pr mock', function () {
             });
         });
     });
-/*
 
-    it('GET /api/job/{jobId}/pr/{number}/start', function (done) {
+    it('DELETE /api/queue/{jobId}/pr/{number}', (done) => {
 
-        var type = 'github';
-        var routes = [
+        const type = 'github';
+        const routes = [
             {
                 method: 'get',
                 path: '/repos/org/repo/pulls/1',
@@ -195,216 +196,19 @@ describe('pr mock', function () {
                 file: 'anonymous.json'
             }
         ];
-        Mock.prepareServer(type, routes, function (mockServer) {
+        Mock.prepareServer(type, routes, (mockServer) => {
 
-            mockServer.start(function () {
-
-                internals.defaults.job.github = {
-                    url: mockServer.info.uri
-                };
-                internals.prepareServer(function (server) {
-
-                    var bait = new Bait(internals.defaults.job);
-                    var jobId = bait.getJobByName('prs').id;
-                    var number = 1;
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/start' }, function (response) {
-
-                        console.log(response.result);
-                        expect(response.statusCode).to.equal(200);
-                        done();
-                    });
-                });
-            });
-        });
-    });
-
-    it('GET /api/job/{jobId}/pr/{number}/start', function (done) {
-
-        internals.prepareServer(function (server) {
-
-            var bait = new Bait(internals.defaults.job);
-            var jobId = bait.getJobByName('prs').id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/prs' }, function (response) {
-
-                //console.log(response.result);
-                expect(response.statusCode).to.equal(200);
-                expect(response.result.length).to.be.above(0);
-                var number = response.result[0].number;
-                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/start' }, function (response) {
-
-                    //console.log(response.result);
-                    expect(response.statusCode).to.equal(200);
-                    done();
-                });
-            });
-        });
-    });
-
-    it('GET /api/job/{jobId}/pr/{number}/runs', function (done) {
-
-        internals.prepareServer(function (server) {
-
-            var bait = new Bait(internals.defaults.job);
-            var jobId = bait.getJobByName('prs').id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/prs' }, function (response) {
-
-                //console.log(response.result);
-                expect(response.statusCode).to.equal(200);
-                expect(response.result.length).to.be.above(0);
-                var number = response.result[0].number;
-                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response) {
-
-                    expect(response.result.length).to.equal(1);
-                    done();
-                });
-            });
-        });
-    });
-
-    it('GET /api/job/{jobId}/pr/{number}/run/{runId}/pids', function (done) {
-
-        internals.prepareServer(function (server) {
-
-            var bait = new Bait(internals.defaults.job);
-            var jobId = bait.getJobByName('prs').id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/prs' }, function (response) {
-
-                //console.log(response.result);
-                expect(response.statusCode).to.equal(200);
-                expect(response.result.length).to.be.above(0);
-                var number = response.result[0].number;
-                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response) {
-
-                    expect(response.statusCode).to.equal(200);
-                    expect(response.result.length).to.equal(1);
-                    //console.log(response.result);
-                    var runId = response.result[0].id;
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/pids' }, function (response2) {
-
-                        //console.log(response2);
-                        expect(response2.result.length).to.equal(1);
-                        expect(response2.result[0]).to.be.a.number();
-                        done();
-                    });
-                });
-            });
-        });
-    });
-
-    it('GET /api/job/{jobId}/pr/{number}/run/{runId}/cancel', function (done) {
-
-        internals.prepareServer(function (server) {
-
-            var bait = new Bait(internals.defaults.job);
-            var jobId = bait.getJobByName('prs').id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/prs' }, function (response) {
-
-                //console.log(response.result);
-                expect(response.statusCode).to.equal(200);
-                expect(response.result.length).to.be.above(0);
-                var number = response.result[0].number;
-                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response) {
-
-                    expect(response.statusCode).to.equal(200);
-                    expect(response.result.length).to.equal(1);
-                    //console.log(response.result);
-                    var runId = response.result[0].id;
-                    server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId + '/cancel' }, function (response2) {
-
-                        //console.log(response2);
-                        //expect(response2.result.length).to.equal(1);
-                        //expect(response2.result[0]).to.be.a.number();
-                        done();
-                    });
-                });
-            });
-        });
-    });
-
-    it('GET /api/job/{jobId}/pr/{number}/run/{runId}', function (done) {
-
-        internals.prepareServer(function (server) {
-
-            var bait = new Bait(internals.defaults.job);
-            var jobId = bait.getJobByName('prs').id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/prs' }, function (response) {
-
-                //console.log(response.result);
-                expect(response.statusCode).to.equal(200);
-                expect(response.result.length).to.be.above(0);
-                var number = response.result[0].number;
-                server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/runs' }, function (response) {
-
-                    var runId = response.result[0].id;
-                    var intervalObj = setInterval(function () {
-
-                        server.inject({ method: 'GET', url: '/api/job/' + jobId + '/pr/' + number + '/run/' + runId }, function (response2) {
-
-                            if (response2.result.finishTime) {
-                                clearInterval(intervalObj);
-                                expect(response2.result.id).to.exist();
-                                expect(response2.result.status).to.equal('cancelled');
-                                expect(response2.result.finishTime).to.exist();
-                                done();
-                            }
-                        });
-                    }, 1000);
-                });
-            });
-        });
-    });
-
-    it('DELETE /api/job/{jobId}/pr/{number}', function (done) {
-
-        internals.prepareServer(function (server) {
-
-            var bait = new Bait(internals.defaults.job);
-            var jobId = bait.getJobByName('prs').id;
-            server.inject({ method: 'GET', url: '/api/job/' + jobId + '/prs' }, function (response) {
-
-                //console.log(response.result);
-                expect(response.statusCode).to.equal(200);
-                expect(response.result.length).to.be.above(0);
-                var number = response.result[0].number;
-                server.inject({ method: 'DELETE', url: '/api/job/' + jobId + '/pr/' + number }, function (response) {
-
-                    expect(response.statusCode).to.equal(200);
-                    done();
-                });
-            });
-        });
-    });
-
-*/
-
-    it('DELETE /api/queue/{jobId}/pr/{number}', function (done) {
-
-        var type = 'github';
-        var routes = [
-            {
-                method: 'get',
-                path: '/repos/org/repo/pulls/1',
-                file: 'index.json'
-            },
-            {
-                method: 'get',
-                path: '/rate_limit',
-                file: 'anonymous.json'
-            }
-        ];
-        Mock.prepareServer(type, routes, function (mockServer) {
-
-            mockServer.start(function () {
+            mockServer.start(() => {
 
                 internals.defaults.job.github = {
                     url: mockServer.info.uri
                 };
-                internals.prepareServer(function (server) {
+                internals.prepareServer((server) => {
 
-                    var bait = new Bait(internals.defaults.job);
-                    var jobId = bait.getJobByName('prs').id;
-                    var number = 1;
-                    server.inject({ method: 'DELETE', url: '/api/queue/' + jobId + '/pr/' + number }, function (response) {
+                    const bait = new Bait(internals.defaults.job);
+                    const jobId = bait.getJobByName('prs').id;
+                    const number = 1;
+                    server.inject({ method: 'DELETE', url: '/api/queue/' + jobId + '/pr/' + number }, (response) => {
 
                         //console.log(response.result);
                         expect(response.statusCode).to.equal(200);
@@ -416,13 +220,13 @@ describe('pr mock', function () {
     });
 
 
-    it('DELETE /api/job/{jobId} prs', function (done) {
+    it('DELETE /api/job/{jobId} prs', (done) => {
 
-        internals.prepareServer(function (server) {
+        internals.prepareServer((server) => {
 
-            var bait = new Bait(internals.defaults.job);
-            var jobId = bait.getJobByName('prs').id;
-            server.inject({ method: 'DELETE', url: '/api/job/' + jobId }, function (response) {
+            const bait = new Bait(internals.defaults.job);
+            const jobId = bait.getJobByName('prs').id;
+            server.inject({ method: 'DELETE', url: '/api/job/' + jobId }, (response) => {
 
                 expect(response.statusCode).to.equal(200);
                 expect(response.payload).to.exist();
